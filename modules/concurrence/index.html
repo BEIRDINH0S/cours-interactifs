@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mémoire partagée</title>
+<meta name="description" content="Ce qui se passe quand plusieurs fils d'execution touchent la meme memoire en meme temps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-top" id="crumb"></div>
+
+  <header class="page">
+    <p class="eyebrow">sujet</p>
+    <h1>Mémoire partagée</h1>
+    <p class="sub">Deux fils d'exécution, une seule mémoire. Tout le sujet tient dans une question :
+    qu'est-ce qui se passe quand on ne décide pas de l'ordre — et comment reprendre la main dessus.</p>
+  </header>
+
+  <section style="margin-top:26px">
+    <h2>Commencer</h2>
+    <p class="lede">Dix étapes. C'est toi qui choisis quel fil avance, un pas à la fois.</p>
+    <div class="cards">
+      <a class="linkcard" href="lecon-data-race.html">
+        <div class="k">leçon · 10 étapes</div>
+        <div class="t">Data race et exclusion mutuelle</div>
+        <div class="d">Tu fabriques toi-même la course en entrelaçant deux incréments, tu découvres
+        jusqu'où un compteur peut tomber, puis tu poses un verrou — et tu provoques un interblocage
+        avant d'apprendre à le rendre impossible.</div>
+        <div class="meta">
+          <span class="pill live">interactif</span>
+          <span class="pill">data race</span>
+          <span class="pill">mutex</span>
+          <span class="pill">deadlock</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ensuite</h2>
+    <p class="lede">Les suites naturelles, pas encore écrites.</p>
+    <div class="cards">
+      <div class="card muted">
+        <div class="card-b">
+          <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)">leçon à venir</div>
+          <div style="font-weight:600;margin:4px 0">Attendre une condition</div>
+          <div style="color:var(--ink-2);font-size:13.5px">Sémaphores et moniteurs : comment un fil
+          dort jusqu'à ce qu'un autre ait fini, sans brûler de processeur à vérifier en boucle.</div>
+        </div>
+      </div>
+      <div class="card muted">
+        <div class="card-b">
+          <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)">leçon à venir</div>
+          <div style="font-weight:600;margin:4px 0">Un verrou ou mille</div>
+          <div style="color:var(--ink-2);font-size:13.5px">Verrou global contre verrou par case :
+          quand découper fait gagner, et quand ça ne change rien.</div>
+        </div>
+      </div>
+      <div class="card muted">
+        <div class="card-b">
+          <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)">leçon à venir</div>
+          <div style="font-weight:600;margin:4px 0">Découper une boucle</div>
+          <div style="color:var(--ink-2);font-size:13.5px">Paralléliser un parcours, et pourquoi le
+          gain plafonne bien avant le nombre de cœurs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script>
+  CI.breadcrumb(CI.el("crumb"), [
+    { label: "Sujets", href: "../../index.html" },
+    { label: "Mémoire partagée" }
+  ]);
+</script>
+</body>
+</html>

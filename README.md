@@ -38,7 +38,9 @@ assets/
   js/hub.js                rendu de l'accueil
   js/lib/
     core.js                helpers DOM et SVG, enveloppe convexe, Fisher-Yates
+    lesson.js              le lecteur de lecon : rail, objectifs bloquants, progression
     graph.js               figure de graphe reutilisable (clic sommet / clic arete)
+    threads.js             simulateur d'entrelacement : fils, memoire partagee, verrous
     stepper.js             controleur pas a pas (boutons, curseur, clavier, deroule auto)
     codepanel.js           panneau de code a onglets avec surlignage de ligne
 modules/
@@ -48,6 +50,10 @@ modules/
     karger.html            l'atelier : l'algorithme vu depuis son implementation en C
     js/                    une lecon = un fichier
     data/implementation-c.js   le code C affiche dans l'atelier
+  concurrence/             « Memoire partagee »
+    index.html             la page du sujet
+    lecon-data-race.html   la lecon « data race et exclusion mutuelle », 10 etapes
+    js/lecon-data-race.js
   architectures-processeurs/   « Hierarchie memoire », squelette servant de patron
 ```
 
@@ -70,5 +76,7 @@ Rien d'autre : pas de manifeste a regenerer, pas de build a relancer.
   doit pouvoir suivre.
 - La progression dans une lecon est gardee en `localStorage`, avec un `try/catch` :
   en navigation privee elle repart simplement de zero.
-- `CI.__lastFig` expose la figure courante d'une lecon ; c'est un point d'accroche
-  pour les tests automatises, pas une API.
+- `CI.__lastFig` et `CI.__lastSim` exposent la figure et le simulateur courants ;
+  ce sont des points d'accroche pour les tests automatises, pas une API.
+- Une lecon ne contient que ses etapes : le lecteur qui les enchaine est commun
+  a tout le site (`assets/js/lib/lesson.js`).

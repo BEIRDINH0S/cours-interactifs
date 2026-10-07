@@ -36,6 +36,24 @@ window.CI_MODULES = [
     ]
   },
   {
+    slug: "concurrence",
+    titre: "Mémoire partagée",
+    cadre: "programmation concurrente",
+    statut: "vivant",
+    resume: "Deux fils d'exécution, une seule mémoire. Ce qui se passe quand on ne décide pas de " +
+            "l'ordre, et comment reprendre la main dessus.",
+    href: "modules/concurrence/index.html",
+    tags: ["1 leçon", "15 min"],
+    pages: [
+      {
+        titre: "Data race et exclusion mutuelle",
+        href: "modules/concurrence/lecon-data-race.html",
+        resume: "Fabriquer une course à la main, puis la supprimer avec un verrou.",
+        statut: "vivant"
+      }
+    ]
+  },
+  {
     slug: "architectures-processeurs",
     titre: "Hiérarchie mémoire",
     cadre: "architecture des machines",

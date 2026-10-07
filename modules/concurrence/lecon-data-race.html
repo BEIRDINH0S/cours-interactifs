@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Coupe minimum — leçon</title>
-<meta name="description" content="Apprendre le probleme de la coupe minimum et l'algorithme de Karger, une etape a la fois.">
+<title>Data race et exclusion mutuelle</title>
+<meta name="description" content="Comprendre les data races, les mutex et les interblocages en choisissant soi-meme l ordre d execution des fils.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -19,7 +19,6 @@
 
   <div class="stage">
     <div class="stage-fig">
-      <svg class="fig" id="fig" viewBox="0 0 520 250" role="img" aria-label="Figure de l'étape"></svg>
       <div id="host"></div>
       <div class="tools" id="tools"></div>
       <div class="readout" id="readout"></div>
@@ -40,8 +39,8 @@
 </div>
 
 <script src="../../assets/js/lib/core.js"></script>
-<script src="../../assets/js/lib/graph.js"></script>
+<script src="../../assets/js/lib/threads.js"></script>
 <script src="../../assets/js/lib/lesson.js"></script>
-<script src="js/lecon-mincut.js"></script>
+<script src="js/lecon-data-race.js"></script>
 </body>
 </html>
