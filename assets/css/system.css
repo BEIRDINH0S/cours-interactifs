@@ -437,3 +437,59 @@ kbd{ font-family:var(--mono); font-size:11.5px; border:1px solid var(--line-2); 
 }
 .codeblock .hot{ color:var(--no); font-weight:600; }
 .codeblock .cold{ color:var(--ok); }
+
+/* =========================================================================
+   Revision par cartes (cards.js)
+   ========================================================================= */
+.deck{ background:var(--panel); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden; }
+.deck-head{
+  display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap;
+  padding:14px 18px; border-bottom:1px solid var(--line); background:var(--panel-2);
+}
+.deck-head .counters{ background:transparent; border:0; gap:18px; display:flex; }
+.deck-head .counters > div{ background:transparent; padding:0; }
+.deck-head .progress{
+  margin-left:auto; font-family:var(--mono); font-size:12.5px; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.deck-body{ padding:22px 18px; min-height:230px; }
+.deck-foot{ display:flex; gap:10px; padding:14px 18px; border-top:1px solid var(--line); flex-wrap:wrap; }
+
+.card-tag{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:8px; min-height:1em;
+}
+.card-q{ font-size:17.5px; line-height:1.45; max-width:62ch; text-wrap:balance; }
+.card-q code{ font-family:var(--mono); font-size:.88em; background:color-mix(in srgb, var(--accent) 12%, transparent); padding:1px 5px; border-radius:4px; }
+.card-a{
+  font-size:15.5px; color:var(--ink); border-left:3px solid var(--accent);
+  padding:10px 0 10px 14px; max-width:62ch;
+}
+.card-a code{ font-family:var(--mono); font-size:.9em; }
+.card-zone{ margin-top:16px; }
+.card-rate{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+
+.card-opts{ display:flex; flex-direction:column; gap:8px; max-width:62ch; }
+button.card-opt{ text-align:left; padding:10px 14px; font-size:14.5px; line-height:1.4; }
+button.card-opt.right{ border-color:var(--ok); color:var(--ok); background:color-mix(in srgb, var(--ok) 9%, transparent); }
+button.card-opt.wrong{ border-color:var(--no); color:var(--no); background:color-mix(in srgb, var(--no) 9%, transparent); }
+
+.card-codeopts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; }
+.card-codeopt{ border:1px solid var(--line-2); border-radius:9px; padding:4px; cursor:pointer; background:var(--panel); }
+.card-codeopt:hover{ border-color:var(--accent); }
+.card-codeopt .codeblock{ border:0; background:transparent; margin:0; font-size:12px; }
+.card-codeopt.right{ border-color:var(--ok); background:color-mix(in srgb, var(--ok) 8%, transparent); }
+.card-codeopt.wrong{ border-color:var(--no); background:color-mix(in srgb, var(--no) 8%, transparent); }
+
+.codeblock.trous{ line-height:2; }
+select.trou{
+  font-family:var(--mono); font-size:12px; padding:1px 4px; border-radius:5px;
+  border:1px solid var(--accent); background:var(--panel); color:var(--ink); margin:0 2px;
+}
+select.trou.right{ border-color:var(--ok); color:var(--ok); }
+select.trou.wrong{ border-color:var(--no); color:var(--no); }
+
+.card-fb{ margin-top:16px; font-size:14px; min-height:2.4em; max-width:66ch; }
+.card-fb:not(:empty){ border-left:3px solid var(--line-2); padding:8px 0 8px 12px; color:var(--ink-2); }
+.card-fb.ok:not(:empty){ border-left-color:var(--ok); color:var(--ink); }
+.card-fb.ko:not(:empty){ border-left-color:var(--no); color:var(--ink); }

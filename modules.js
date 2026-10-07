@@ -19,7 +19,7 @@ window.CI_MODULES = [
     resume: "Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps, " +
             "résout quand même un problème que l'énumération ne peut pas atteindre.",
     href: "modules/advanced-algorithms/index.html",
-    tags: ["1 leçon", "1 atelier", "15 min"],
+    tags: ["1 leçon", "1 atelier", "16 cartes"],
     pages: [
       {
         titre: "Coupe minimum",
@@ -32,6 +32,12 @@ window.CI_MODULES = [
         href: "modules/advanced-algorithms/karger.html",
         resume: "L'implémentation en C et l'état de ses tableaux, tour par tour.",
         statut: "vivant"
+      },
+      {
+        titre: "Réviser",
+        href: "modules/advanced-algorithms/revision.html",
+        resume: "16 cartes, en répétition espacée.",
+        statut: "vivant"
       }
     ]
   },
@@ -43,12 +49,18 @@ window.CI_MODULES = [
     resume: "Deux fils d'exécution, une seule mémoire. Ce qui se passe quand on ne décide pas de " +
             "l'ordre, et comment reprendre la main dessus.",
     href: "modules/concurrence/index.html",
-    tags: ["1 leçon", "15 min"],
+    tags: ["1 leçon", "18 cartes"],
     pages: [
       {
         titre: "Data race et exclusion mutuelle",
         href: "modules/concurrence/lecon-data-race.html",
         resume: "Fabriquer une course à la main, puis la supprimer avec un verrou.",
+        statut: "vivant"
+      },
+      {
+        titre: "Réviser",
+        href: "modules/concurrence/revision.html",
+        resume: "18 cartes, en répétition espacée.",
         statut: "vivant"
       }
     ]

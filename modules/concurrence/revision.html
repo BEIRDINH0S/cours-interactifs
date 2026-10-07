@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Réviser — Mémoire partagée</title>
+<meta name="description" content="Cartes de revision : questions de cours, code a completer, choix entre versions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-top" id="crumb"></div>
+
+  <header class="lesson-head">
+    <h1>Réviser — Mémoire partagée</h1>
+    <p class="sub">Data races, verrous, interblocages et code Java à compléter. Une carte ratée revient à la session suivante ; une carte sue s'éloigne — 1 jour, puis 3, 7, 16, 35.</p>
+  </header>
+
+  <div class="deck">
+    <div class="deck-head">
+      <div class="counters" id="deck-meta"></div>
+      <span class="progress" id="deck-progress"></span>
+    </div>
+    <div class="deck-body" id="deck-host"></div>
+    <div class="deck-foot" id="deck-foot"></div>
+  </div>
+
+  <footer class="page">
+    <p>Les échéances sont gardées <strong>dans ce navigateur</strong>. Elles ne suivent pas d'un
+    appareil à l'autre, et rien ne viendra te rappeler de réviser : c'est à toi de revenir.</p>
+    <p><button id="deck-reset">Remettre le paquet à zéro</button></p>
+  </footer>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script src="../../assets/js/lib/cards.js"></script>
+<script src="js/cartes.js"></script>
+<script>
+  CI.breadcrumb(CI.el("crumb"), [
+    { label: "Sujets", href: "../../index.html" },
+    { label: "Mémoire partagée", href: "index.html" },
+    { label: "Réviser" }
+  ]);
+  CI.Deck({
+    key: "cartes-concurrence",
+    cartes: window.CI_CARTES,
+    els: { host: "deck-host", meta: "deck-meta", foot: "deck-foot",
+           progress: "deck-progress", relancer: "deck-reset" }
+  });
+</script>
+</body>
+</html>
