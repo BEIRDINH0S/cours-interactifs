@@ -23,6 +23,7 @@ window.CI = window.CI || {};
     this.edges = def.edges;
     this.radius = def.radius || 21;
     this.onVertexClick = def.onVertexClick || null;
+    this.onEdgeClick = def.onEdgeClick || null;
   }
 
   /** Degre de chaque sommet dans le graphe de depart. */
@@ -86,11 +87,19 @@ window.CI = window.CI || {};
       var cls = opts.edgeClass
         ? opts.edgeClass(e, k)
         : "edge" + (groupOf(e[0]) === groupOf(e[1]) ? " dead" : "");
-      self.svg.appendChild(CI.svg("line", {
+      var coords = {
         x1: self.pos[e[0]][0], y1: self.pos[e[0]][1],
-        x2: self.pos[e[1]][0], y2: self.pos[e[1]][1],
-        "class": cls
-      }));
+        x2: self.pos[e[1]][0], y2: self.pos[e[1]][1]
+      };
+      // une arete fine se clique mal : on superpose une piste transparente large
+      if (self.onEdgeClick) {
+        var hit = CI.svg("line", Object.assign({}, coords, {
+          stroke: "transparent", "stroke-width": 18, "class": "edge-hit"
+        }));
+        hit.addEventListener("click", function () { self.onEdgeClick(k, e); });
+        self.svg.appendChild(hit);
+      }
+      self.svg.appendChild(CI.svg("line", Object.assign({}, coords, { "class": cls })));
     });
 
     // --- etiquettes d'arete
@@ -136,10 +145,10 @@ window.CI = window.CI || {};
   CI.GraphFig = GraphFig;
 
   /* ---------------------------------------------------------------------
-     Le graphe fil rouge du cours : deux triangles relies par un pont.
+     Le graphe fil rouge des lecons : deux triangles relies par un pont.
      Coupe minimum = le pont c-d, de valeur 1.
-     Les aretes sont stockees (u, v) avec u > v, comme la collecte de
-     ordre_aleatoire_aretes dans le TP1.
+     Les aretes sont stockees (u, v) avec u > v, comme la collecte depuis
+     les listes d'adjacence.
      --------------------------------------------------------------------- */
   CI.FIL_ROUGE = {
     names: ["a", "b", "c", "d", "e", "f"],

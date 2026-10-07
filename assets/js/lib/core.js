@@ -113,7 +113,7 @@ window.CI = window.CI || {};
 
   /* ---------------------------------------------------------------- divers */
 
-  /** Melange de Fisher-Yates, identique a celui du TP1 (tirage dans [i, m-1]). */
+  /** Melange de Fisher-Yates (tirage dans [i, m-1], sans biais). */
   CI.fisherYates = function (arr) {
     var a = arr.slice();
     for (var i = 0; i < a.length - 1; i++) {
@@ -124,8 +124,8 @@ window.CI = window.CI || {};
   };
 
   /**
-   * Nom lisible d'une arete. Les aretes sont stockees (u, v) avec u > v,
-   * comme la collecte du TP1 ; on les affiche dans l'ordre des sommets.
+   * Nom lisible d'une arete. Les aretes sont stockees (u, v) avec u > v ;
+   * on les affiche dans l'ordre des sommets.
    */
   CI.edgeName = function (names, e) {
     var lo = Math.min(e[0], e[1]), hi = Math.max(e[0], e[1]);

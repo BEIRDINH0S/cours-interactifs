@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Karger pas à pas — Advanced Algorithms</title>
-<meta name="description" content="La boucle de contraction du TP1 mincut deroulee etape par etape, avec les trois tableaux et le code C.">
+<title>Karger, instruction par instruction</title>
+<meta name="description" content="L'algorithme de Karger vu depuis son implementation en C : etat des tableaux et ligne executee a chaque tour.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -16,10 +16,10 @@
   <div class="site-top" id="crumb"></div>
 
   <header class="page">
-    <p class="eyebrow">TP1 mincut · questions 12 à 14</p>
-    <h1>Karger pas à pas</h1>
-    <p class="sub">Le graphe, les trois tableaux et la ligne de code avancent ensemble. Six sommets,
-    sept arêtes, un pont : la coupe minimum vaut 1.</p>
+    <p class="eyebrow">atelier · implémentation</p>
+    <h1>Instruction par instruction</h1>
+    <p class="sub">L'algorithme vu depuis son code. À chaque étape : le graphe contracté, l'état des
+    trois tableaux qui le représentent, et la ligne en train de s'exécuter.</p>
   </header>
 
   <div class="bar" style="margin-top:18px">
@@ -73,7 +73,7 @@
 
     <div>
       <section class="card" style="margin-bottom:0">
-        <div class="card-h">ordre[] <span class="note">tiré une fois par Fisher-Yates, puis figé</span></div>
+        <div class="card-h">ordre des arêtes <span class="note">tiré une fois par Fisher-Yates, puis figé</span></div>
         <div class="card-b"><div class="chips" id="chips"></div></div>
       </section>
 
@@ -99,7 +99,8 @@
   <footer class="page">
     <p><kbd>←</kbd> <kbd>→</kbd> pour avancer, <kbd>espace</kbd> pour l'étape suivante. L'onglet de
     code suit l'étape courante ; on peut en ouvrir un autre à la main.</p>
-    <p>Rien ici ne va au-delà de la Q14 : pas de répétition de l'algorithme, c'est l'objet des Q15 à Q17.</p>
+    <p>Une seule exécution est déroulée ici. Répéter l'algorithme pour fiabiliser le résultat fera
+    l'objet d'une leçon à part.</p>
   </footer>
 </div>
 
@@ -107,7 +108,7 @@
 <script src="../../assets/js/lib/graph.js"></script>
 <script src="../../assets/js/lib/stepper.js"></script>
 <script src="../../assets/js/lib/codepanel.js"></script>
-<script src="data/tp1-code.js"></script>
+<script src="data/implementation-c.js"></script>
 <script src="js/karger.js"></script>
 </body>
 </html>

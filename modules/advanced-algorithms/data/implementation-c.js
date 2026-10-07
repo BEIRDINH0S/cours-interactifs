@@ -1,16 +1,15 @@
 /* =========================================================================
-   tp1-code.js — le code du TP1 tel qu'il est affiche dans le panneau.
+   implementation-c.js — l'implementation en C affichee dans le panneau de l'atelier.
 
-   Copie du code reellement ecrit dans ~/Documents/AdvancedAlgorithms/TP1-mincut,
-   commentaires raccourcis pour tenir a l'ecran. Les ecarts avec le fichier
-   source sont signales dans le champ "note" de chaque onglet.
+   Commentaires raccourcis pour tenir a l'ecran ; quand un extrait est
+   simplifie, l'ecart est signale dans le champ "note" de l'onglet.
    ========================================================================= */
-window.CI_TP1_CODE = {
+window.CI_CODE_C = {
   main: {
-    label: "main.c — boucle q13",
-    note: "Extrait de main.c, lignes 202-245. Fidèle au fichier source.",
+    label: "boucle de contraction",
+    note: "Le cœur de l'algorithme : on parcourt l'ordre tiré au hasard et on contracte tout ce qui relie encore deux groupes distincts.",
     lines: [
-      "/* 1) Un ordre aleatoire sur les m aretes (question 12) */",
+      "/* 1) Un ordre aleatoire sur les m aretes */",
       "arete *ordre = ordre_aleatoire_aretes(g);",
       "",
       "int nb_groupes = g->n;",
@@ -21,7 +20,7 @@ window.CI_TP1_CODE = {
       "    a = ordre[i].u;",
       "    b = ordre[i].v;",
       "",
-      "    /* q11 : l'arete existe encore dans le multigraphe contracte",
+      "    /* l'arete existe encore dans le multigraphe contracte",
       "       ssi ses extremites sont dans des groupes differents */",
       "    if (groupe[a] != groupe[b]) {",
       "        contraction_simulee(a, b, groupe, membres, taille);",
@@ -29,15 +28,15 @@ window.CI_TP1_CODE = {
       "    }",
       "}",
       "",
-      "/* 4) Valeur de la coupe obtenue (question 14) */",
+      "/* Valeur de la coupe obtenue */",
       "int coupe = valeur_coupe(g, groupe);"
     ]
   },
 
   cs: {
-    label: "contraction_simulee",
-    note: "Ligne 23 : la concaténation est raccourcie. Le fichier source teste d'abord " +
-          "membres[grand]->dern == NULL, le cas où la liste du grand groupe est vide.",
+    label: "contraction (union par taille)",
+    note: "Ligne 23 : concaténation raccourcie — une implémentation complète teste d'abord le cas " +
+          "où la liste du grand groupe est vide.",
     lines: [
       "void contraction_simulee(int u, int v, int *groupe,",
       "                        nodl **membres, int *taille){",
@@ -73,8 +72,8 @@ window.CI_TP1_CODE = {
   },
 
   vc: {
-    label: "valeur_coupe — q14",
-    note: "Fidèle à fonctions-algo.c. Elle relit le graphe de DEPART, celui qui n'a jamais été modifié.",
+    label: "valeur d'une coupe",
+    note: "Elle relit le graphe de DEPART, celui qui n'a jamais été modifié : seules les étiquettes ont bougé.",
     lines: [
       "int valeur_coupe(graph *g, int *groupe){",
       "    int u, nb = 0;",
@@ -96,9 +95,9 @@ window.CI_TP1_CODE = {
   },
 
   oa: {
-    label: "ordre_aleatoire_aretes — q12",
-    note: "Le mélange de Fisher-Yates de la question 12. Tirer j dans [0, m-1] au lieu de [i, m-1] " +
-          "donnerait une distribution biaisée : m^m chemins d'exécution pour m! permutations.",
+    label: "ordre aléatoire",
+    note: "Mélange de Fisher-Yates. Tirer j dans [0, m-1] au lieu de [i, m-1] donnerait une " +
+          "distribution biaisée : m^m chemins d'exécution pour m! permutations.",
     lines: [
       "/* 1) COLLECTE : p->node < u ne retient qu'une des deux",
       "   occurrences de chaque arete */",

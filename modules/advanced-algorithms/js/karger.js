@@ -1,5 +1,5 @@
 /* =========================================================================
-   karger.js — deroule la boucle de contraction du TP1, etape par etape.
+   karger.js — deroule la boucle de contraction, etape par etape.
 
    La trace est construite une fois pour un ordre donne : chaque etape
    contient une copie complete de l'etat (groupe, taille, membres), donc
@@ -13,9 +13,9 @@
   var NAME = G.names, EDGES = G.edges, N = NAME.length, M = EDGES.length;
 
   CI.breadcrumb(CI.el("crumb"), [
-    { label: "Cours interactifs", href: "../../index.html" },
-    { label: "Advanced Algorithms", href: "index.html" },
-    { label: "Karger pas à pas" }
+    { label: "Sujets", href: "../../index.html" },
+    { label: "Graphes et aléatoire", href: "index.html" },
+    { label: "Atelier" }
   ]);
 
   /* Deux ordres choisis pour ce qu'ils montrent, plus le tirage aleatoire. */
@@ -142,7 +142,7 @@
     var cross = [];
     EDGES.forEach(function (e, idx) { if (groupe[e[0]] !== groupe[e[1]]) cross.push(idx); });
     push({
-      file: "vc", line: 11, phase: "valeur_coupe — question 14", cross: cross, done: true,
+      file: "vc", line: 11, phase: "valeur de la coupe", cross: cross, done: true,
       say: "On relit le <strong>graphe de départ</strong>, celui qui n'a jamais été modifié, et on " +
            "compte les arêtes dont les deux extrémités portent des étiquettes différentes : " +
            cross.map(function (idx) {
@@ -254,4 +254,4 @@
   });
 
   load(PRESETS.A.map(function (e) { return [e[0], e[1]]; }));
-})(window.CI, window.CI_TP1_CODE);
+})(window.CI, window.CI_CODE_C);

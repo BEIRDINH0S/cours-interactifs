@@ -1,51 +1,57 @@
-# Cours interactifs
+# Apprendre en manipulant
 
-Les mecanismes de mes cours de M1, rendus manipulables : une boucle qu'on deroule,
-une demonstration qui se telescope, un comportement materiel qu'on fait varier.
-Un module par matiere.
+Des sujets d'informatique expliques par la manipulation plutot que par la lecture :
+une idee par ecran, quelque chose a faire a chaque fois, et un objectif a valider
+avant de passer a la suite.
 
-Le site est en ligne via GitHub Pages. Les fiches de revision et les notes de seance
-restent dans le vault Obsidian : ce depot sert a comprendre, pas a memoriser.
+En ligne : https://beirdinh0s.github.io/cours-interactifs/
+
+## Le format d'une lecon
+
+Une lecon est une suite d'etapes. Chaque etape declare un titre, deux ou trois
+phrases, un objectif facultatif et une fonction `mount()` qui installe la
+manipulation. Tant que l'objectif n'est pas atteint, « Continuer » reste ferme.
+
+La regle qui tient tout : **un seul exemple par lecon**, du debut a la fin. Chaque
+nouvelle idee s'ajoute sur un terrain deja familier, au lieu de repartir d'un
+dessin neuf a chaque section.
 
 ## Lancer en local
 
 Aucune dependance, aucune compilation. Deux facons :
 
 ```sh
-# 1. ouvrir directement le fichier
-open index.html
-
-# 2. ou servir le dossier, si on prefere une vraie URL
-python3 -m http.server 8000   # puis http://localhost:8000
+open index.html                 # ouverture directe du fichier
+python3 -m http.server 8000     # ou servir le dossier : http://localhost:8000
 ```
 
-Le code est ecrit en scripts classiques plutot qu'en modules ES, precisement pour que
-l'ouverture directe d'un fichier (`file://`) fonctionne sans serveur.
+Le code est ecrit en scripts classiques plutot qu'en modules ES, precisement pour
+que l'ouverture directe d'un fichier (`file://`) fonctionne sans serveur.
 
 ## Structure
 
 ```
-index.html                 page d'accueil, construite depuis modules.js
-modules.js                 LA liste des modules — le seul fichier a editer pour en ajouter un
+index.html                 accueil, construite depuis modules.js
+modules.js                 LA liste des sujets — le seul fichier a editer pour en ajouter un
 assets/
   css/system.css           jetons de couleur, typographie, composants partages
-  js/hub.js                rendu de la page d'accueil
+  js/hub.js                rendu de l'accueil
   js/lib/
     core.js                helpers DOM et SVG, enveloppe convexe, Fisher-Yates
-    graph.js               figure de graphe reutilisable (+ le graphe fil rouge du cours)
+    graph.js               figure de graphe reutilisable (clic sommet / clic arete)
     stepper.js             controleur pas a pas (boutons, curseur, clavier, deroule auto)
     codepanel.js           panneau de code a onglets avec surlignage de ligne
 modules/
-  advanced-algorithms/
-    index.html             le cours a manipuler : coupe, contraction, la borne, exponentiation
-    karger.html            la boucle de contraction du TP1, etape par etape
-    js/                    le code propre a ces deux pages
-    data/tp1-code.js       le code C affiche dans le panneau
-  architectures-processeurs/
-    index.html             squelette, sert de patron
+  advanced-algorithms/     « Graphes et aleatoire »
+    index.html             la page du sujet : ses lecons et ses ateliers
+    lecon-mincut.html      la lecon « coupe minimum », 10 etapes
+    karger.html            l'atelier : l'algorithme vu depuis son implementation en C
+    js/                    une lecon = un fichier
+    data/implementation-c.js   le code C affiche dans l'atelier
+  architectures-processeurs/   « Hierarchie memoire », squelette servant de patron
 ```
 
-## Ajouter un module
+## Ajouter un sujet
 
 1. `mkdir modules/<slug>` et y mettre un `index.html` (copier celui de
    `architectures-processeurs`, c'est le patron).
@@ -56,8 +62,13 @@ Rien d'autre : pas de manifeste a regenerer, pas de build a relancer.
 
 ## Conventions
 
-- Les deux themes, clair et sombre, suivent celui du systeme. Toute couleur passe par un
-  jeton defini dans `system.css` — jamais de valeur en dur dans une page.
+- Les deux themes, clair et sombre, suivent celui du systeme. Toute couleur passe
+  par un jeton defini dans `system.css` — jamais de valeur en dur dans une page.
 - Chaque page tient a 400 px de large.
-- Le code C affiche est celui reellement ecrit pour les TP. Quand un extrait est
-  raccourci, l'ecart est signale dans le champ `note` de l'onglet concerne.
+- Une page explique un sujet, pas un cours : pas de numeros de questions, pas de
+  references a un enonce ou a un enseignant. Quelqu'un qui arrive sans contexte
+  doit pouvoir suivre.
+- La progression dans une lecon est gardee en `localStorage`, avec un `try/catch` :
+  en navigation privee elle repart simplement de zero.
+- `CI.__lastFig` expose la figure courante d'une lecon ; c'est un point d'accroche
+  pour les tests automatises, pas une API.

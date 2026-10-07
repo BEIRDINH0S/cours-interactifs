@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Architectures de processeurs — chantier</title>
-<meta name="description" content="Module en chantier : pipelines, superscalaire et hierarchie memoire.">
+<title>Hiérarchie mémoire</title>
+<meta name="description" content="Pourquoi un programme ralentit quand ses donnees grossissent : les caches, et ce que leurs paliers racontent.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -16,50 +16,39 @@
   <div class="site-top" id="crumb"></div>
 
   <header class="page">
-    <p class="eyebrow">M1 S1 · architectures de processeurs haute performance</p>
+    <p class="eyebrow">sujet · en chantier</p>
     <h1>Hiérarchie mémoire</h1>
-    <p class="sub">Module en chantier. Il sert pour l'instant de patron : c'est à quoi ressemble un
-    nouveau cours avant d'avoir son contenu.</p>
+    <p class="sub">Le même programme, les mêmes instructions, mais dix fois plus lent parce que le
+    tableau est plus grand. Ce sujet explique d'où vient la différence.</p>
   </header>
 
-  <section style="margin-top:24px">
-    <span class="tag">prochaine page à écrire</span>
-    <h2>Le simulateur de paliers de cache</h2>
-    <p class="lede">Un tableau de N éléments qu'on fait grossir, un temps d'accès moyen par taille, et
-    la courbe en paliers qui en sort. Les trois choses à y rendre visibles :</p>
+  <section style="margin-top:26px">
+    <h2>La leçon à écrire</h2>
+    <p class="lede">Elle tournera autour d'une seule courbe : le temps d'accès moyen en fonction de
+    la taille des données parcourues. Trois choses à y rendre manipulables.</p>
     <div class="card">
       <div class="card-b">
         <ol class="exam">
-          <li><span class="num">01</span><div><b>Pourquoi des paliers</b><span>Tant que le tableau tient dans un niveau de cache, le temps d'accès reste plat. Il saute quand on déborde — et la position du saut donne la taille du niveau.</span></div></li>
-          <li><span class="num">02</span><div><b>Le prefetcher matériel</b><span>Un parcours régulier est détecté par le processeur, qui précharge les lignes suivantes. La courbe mesurée n'est alors plus celle de la latence, mais celle de la bande passante.</span></div></li>
-          <li><span class="num">03</span><div><b>Le palier qui n'arrive pas où on l'attend</b><span>L'associativité et la politique de remplacement décalent le saut : selon le niveau, il apparaît à la taille du cache ou au-delà. C'est le point resté en suspens le 05/10.</span></div></li>
+          <li><span class="num">1</span><div><b>Faire apparaître les paliers</b><span>Tant que les données tiennent dans un niveau de cache, le temps reste plat. Il saute quand on déborde — et la position du saut donne la taille du niveau.</span></div></li>
+          <li><span class="num">2</span><div><b>Casser le prefetcher</b><span>Un parcours régulier est détecté par le processeur, qui précharge la suite. On ne mesure alors plus la latence mais le débit. Passer le parcours en aléatoire et voir la courbe changer de nature.</span></div></li>
+          <li><span class="num">3</span><div><b>Le palier qui n'arrive pas où on l'attend</b><span>L'associativité et la politique de remplacement décalent le saut. Selon le niveau, il apparaît à la taille du cache ou nettement au-delà.</span></div></li>
         </ol>
-        <div class="callout warn">
-          <b>À reprendre d'abord.</b> Les mesures du TP2 ont été faites sur un Apple A18 Pro, dont
-          le préchargement complique la lecture des paliers. Avant d'écrire la page, il faut trancher
-          ce qu'on représente : la machine réelle, ou le modèle du cours.
-        </div>
       </div>
     </div>
   </section>
 
   <section>
-    <span class="tag">séances déjà couvertes dans le vault</span>
-    <h2>Ce qui existe en notes</h2>
-    <div class="card">
-      <div class="card-b">
-        <div class="counters">
-          <div><div class="t">CM1</div><div class="v ok">séquentiels, pipelines</div></div>
-          <div><div class="t">CM2</div><div class="v ok">superscalaires</div></div>
-          <div><div class="t">TP1</div><div class="v ok">analyse matérielle</div></div>
-          <div><div class="t">TP2</div><div class="v todo">cache, en cours</div></div>
-        </div>
-      </div>
+    <h2>Avant de l'écrire</h2>
+    <div class="callout warn">
+      <b>Une décision à prendre.</b> Simuler un modèle de cache propre, ou rejouer des mesures
+      réelles ? Les deux enseignent, mais pas la même chose : le modèle montre la théorie nette, la
+      mesure montre pourquoi la théorie ne suffit pas. Le plus probable : le modèle d'abord, puis une
+      étape finale qui confronte à des mesures.
     </div>
   </section>
 
   <footer class="page">
-    <p>Pour transformer ce squelette en module vivant : ajouter une page à côté de ce fichier, puis
+    <p>Pour transformer ce squelette en sujet vivant : ajouter une leçon à côté de ce fichier, puis
     l'inscrire dans <code>modules.js</code>, champ <code>pages</code>.</p>
   </footer>
 </div>
@@ -67,8 +56,8 @@
 <script src="../../assets/js/lib/core.js"></script>
 <script>
   CI.breadcrumb(CI.el("crumb"), [
-    { label: "Cours interactifs", href: "../../index.html" },
-    { label: "Architectures de processeurs" }
+    { label: "Sujets", href: "../../index.html" },
+    { label: "Hiérarchie mémoire" }
   ]);
 </script>
 </body>

@@ -13,10 +13,10 @@
     var meta = CI.h("div", { "class": "meta" });
     meta.appendChild(CI.h("span", {
       "class": "pill " + (vivant ? "live" : "wip"),
-      text: vivant ? "utilisable" : "chantier"
+      text: vivant ? "interactif" : "chantier"
     }));
-    (m.seances || []).forEach(function (s) {
-      meta.appendChild(CI.h("span", { "class": "pill", text: s }));
+    (m.tags || []).forEach(function (t) {
+      meta.appendChild(CI.h("span", { "class": "pill", text: t }));
     });
 
     var card = CI.h("a", {

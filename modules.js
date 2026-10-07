@@ -1,10 +1,10 @@
 /* =========================================================================
-   modules.js — LE SEUL FICHIER A EDITER POUR AJOUTER UN COURS.
+   modules.js — LE SEUL FICHIER A EDITER POUR AJOUTER UN SUJET.
 
    La page d'accueil se construit a partir de cette liste. Pour un nouveau
-   module : creer modules/<slug>/index.html, puis ajouter une entree ici.
+   sujet : creer modules/<slug>/index.html, puis ajouter une entree ici.
 
-   statut : "vivant"  -> au moins une page interactive utilisable
+   statut : "vivant"   -> au moins une lecon utilisable
             "chantier" -> squelette en place, contenu a venir
 
    Script classique (et non JSON charge par fetch) pour que l'ouverture
@@ -13,37 +13,37 @@
 window.CI_MODULES = [
   {
     slug: "advanced-algorithms",
-    titre: "Advanced Algorithms",
-    cadre: "M1 S1 · électif",
+    titre: "Graphes et aléatoire",
+    cadre: "algorithmique",
     statut: "vivant",
-    resume: "Algorithmes probabilistes et minimum cut. L'algorithme de Karger manipulable, " +
-            "la démonstration de la borne 2/n(n−1) qui se télescope à l'écran, et le TP1 déroulé sur le vrai code C.",
+    resume: "Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps, " +
+            "résout quand même un problème que l'énumération ne peut pas atteindre.",
     href: "modules/advanced-algorithms/index.html",
-    seances: ["CM1 — 16/09", "CM2 — 23/09", "TP1 — 30/09"],
+    tags: ["1 leçon", "1 atelier", "15 min"],
     pages: [
       {
-        titre: "Le cours à manipuler",
-        href: "modules/advanced-algorithms/index.html",
-        resume: "Coupe, contraction, la borne, exponentiation rapide.",
+        titre: "Coupe minimum",
+        href: "modules/advanced-algorithms/lecon-mincut.html",
+        resume: "Dix étapes, de la définition à la démonstration de la borne.",
         statut: "vivant"
       },
       {
-        titre: "Karger pas à pas",
+        titre: "L'algorithme instruction par instruction",
         href: "modules/advanced-algorithms/karger.html",
-        resume: "La boucle de contraction du TP1, tour par tour, code C surligné.",
+        resume: "L'implémentation en C et l'état de ses tableaux, tour par tour.",
         statut: "vivant"
       }
     ]
   },
   {
     slug: "architectures-processeurs",
-    titre: "Architectures de processeurs HP",
-    cadre: "M1 S1",
+    titre: "Hiérarchie mémoire",
+    cadre: "architecture des machines",
     statut: "chantier",
-    resume: "Pipelines, superscalaire, hiérarchie mémoire. Le simulateur de paliers de cache " +
-            "(taille du tableau contre temps d'accès, et ce que le prefetcher en fait) reste à écrire.",
+    resume: "Pourquoi le même programme va dix fois plus vite sur un petit tableau que sur un grand, " +
+            "et ce que les paliers d'une courbe de temps d'accès révèlent des caches.",
     href: "modules/architectures-processeurs/index.html",
-    seances: ["CM1 — séquentiels et pipelines", "CM2 — superscalaires", "TP1 — analyse matérielle", "TP2 — cache"],
+    tags: ["leçon à venir"],
     pages: []
   }
 ];
