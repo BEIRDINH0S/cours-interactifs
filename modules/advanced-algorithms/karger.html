@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karger pas à pas — Advanced Algorithms</title>
+<meta name="description" content="La boucle de contraction du TP1 mincut deroulee etape par etape, avec les trois tableaux et le code C.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap wide">
+
+  <div class="site-top" id="crumb"></div>
+
+  <header class="page">
+    <p class="eyebrow">TP1 mincut · questions 12 à 14</p>
+    <h1>Karger pas à pas</h1>
+    <p class="sub">Le graphe, les trois tableaux et la ligne de code avancent ensemble. Six sommets,
+    sept arêtes, un pont : la coupe minimum vaut 1.</p>
+  </header>
+
+  <div class="bar" style="margin-top:18px">
+    <div class="seg">
+      <button id="prev" title="Flèche gauche">◀ Précédent</button>
+      <button id="next" class="primary" title="Flèche droite ou espace">Suivant ▶</button>
+      <button id="play">Dérouler</button>
+    </div>
+    <input type="range" id="scrub" min="0" max="1" value="0" aria-label="Position dans le déroulé">
+    <span class="stepno" id="stepno">étape 0 / 0</span>
+    <span class="spacer"></span>
+    <div class="seg">
+      <span class="seg-label">ordre[]</span>
+      <button id="pA" aria-pressed="true">bon tirage</button>
+      <button id="pB" aria-pressed="false">le pont est tiré</button>
+      <button id="pR" aria-pressed="false">au hasard</button>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <section class="card" style="margin-bottom:0">
+        <div class="card-h">Le multigraphe contracté <span class="note">les sommets ne bougent jamais, seules les couleurs changent</span></div>
+        <div class="card-b">
+          <svg class="fig" id="svg" viewBox="0 0 520 250" role="img" aria-label="Graphe en cours de contraction"></svg>
+          <div class="legend">
+            <span><i style="border-top-color:var(--line-2)"></i>arête vivante</span>
+            <span><i style="border-top-color:var(--line);border-top-style:dashed"></i>absorbée (même groupe)</span>
+            <span><i style="border-top-color:var(--mark)"></i>arête courante</span>
+            <span><i style="border-top-color:var(--no)"></i>traverse la coupe</span>
+          </div>
+        </div>
+        <div class="explain">
+          <div class="phase" id="phase">état initial</div>
+          <p id="say"></p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-h">Compteurs</div>
+        <div class="card-b">
+          <div class="counters">
+            <div><div class="t">tours</div><div class="v" id="c-tours">0</div></div>
+            <div><div class="t">contractions</div><div class="v" id="c-contr">0</div></div>
+            <div><div class="t">rejets</div><div class="v" id="c-rej">0</div></div>
+            <div><div class="t">nb_groupes</div><div class="v" id="c-grp">6</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="card" style="margin-bottom:0">
+        <div class="card-h">ordre[] <span class="note">tiré une fois par Fisher-Yates, puis figé</span></div>
+        <div class="card-b"><div class="chips" id="chips"></div></div>
+      </section>
+
+      <section class="card">
+        <div class="card-h">Les tableaux</div>
+        <div class="card-b">
+          <p class="arr-title">groupe[u] <span>— l'étiquette de chaque sommet</span></p>
+          <div class="arr" id="arr-groupe"></div>
+          <p class="arr-title">taille[k] <span>— combien de sommets dans le groupe k (0 = groupe absorbé)</span></p>
+          <div class="arr" id="arr-taille"></div>
+          <div class="members" id="membres"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <div class="tabs" id="tabs"></div>
+    <pre class="code" id="code"></pre>
+    <div class="codenote" id="codenote"></div>
+  </section>
+
+  <footer class="page">
+    <p><kbd>←</kbd> <kbd>→</kbd> pour avancer, <kbd>espace</kbd> pour l'étape suivante. L'onglet de
+    code suit l'étape courante ; on peut en ouvrir un autre à la main.</p>
+    <p>Rien ici ne va au-delà de la Q14 : pas de répétition de l'algorithme, c'est l'objet des Q15 à Q17.</p>
+  </footer>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script src="../../assets/js/lib/graph.js"></script>
+<script src="../../assets/js/lib/stepper.js"></script>
+<script src="../../assets/js/lib/codepanel.js"></script>
+<script src="data/tp1-code.js"></script>
+<script src="js/karger.js"></script>
+</body>
+</html>

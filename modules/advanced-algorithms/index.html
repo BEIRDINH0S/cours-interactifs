@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Min cut à manipuler — Advanced Algorithms</title>
+<meta name="description" content="Coupe, contraction, borne de Karger et exponentiation rapide, a manipuler.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-top" id="crumb"></div>
+
+  <header class="page">
+    <p class="eyebrow">Advanced Algorithms · séances du 16/09, 23/09 et 30/09</p>
+    <h1>Min cut à manipuler</h1>
+    <p class="sub">Tout ce que le cours a couvert jusqu'ici, sous forme de choses à faire bouger plutôt
+    qu'à relire. Un seul graphe fil rouge — six sommets, sept arêtes — du début à la fin de la page.</p>
+  </header>
+
+  <nav class="sections">
+    <ul>
+      <li><a href="#coupe">1 · Qu'est-ce qu'une coupe</a></li>
+      <li><a href="#contraction">2 · Contracter</a></li>
+      <li><a href="#borne">3 · La borne 2/n(n−1)</a></li>
+      <li><a href="#expo">4 · Exponentiation rapide</a></li>
+      <li><a href="#tp">5 · Où en est le TP1</a></li>
+      <li><a href="#exam">6 · Pour l'exam</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===================================================== 1 -->
+  <section id="coupe">
+    <span class="tag">définition — CM1</span>
+    <h2>Une coupe, c'est une façon de séparer les sommets</h2>
+    <p class="lede">Clique sur un sommet pour le faire passer d'un côté à l'autre. Les arêtes qui
+    traversent s'allument et le compteur les suit. Essaie de descendre à 1 — puis regarde ce qui se
+    passe quand tu isoles un seul sommet.</p>
+    <div class="card">
+      <div class="split">
+        <div>
+          <svg class="fig" id="cutfig" viewBox="0 0 520 250" role="img" aria-label="Graphe à partitionner en deux groupes"></svg>
+          <div class="row" style="margin-top:12px">
+            <button id="cut-reset">Tout remettre du même côté</button>
+            <button id="cut-min">Montre-moi la coupe minimum</button>
+          </div>
+        </div>
+        <div>
+          <div class="read">valeur de la coupe</div>
+          <div class="big" id="cut-val">0</div>
+          <div class="setline">
+            U&nbsp;= <b class="a" id="set-a">∅</b><br>
+            U'&nbsp;= <b class="b" id="set-b">a b c d e f</b>
+          </div>
+          <div class="verdict" id="cut-say"></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <b>Le piège de la définition.</b> <code>U</code> et <code>U'</code> doivent être
+      <strong>non vides</strong> tous les deux. Sans cette clause, la « meilleure » coupe consisterait
+      à tout mettre du même côté : zéro arête traversante, et le problème n'aurait plus de sens.
+    </div>
+    <div class="callout warn">
+      <b>Le lemme caché.</b> Isole un seul sommet : la valeur affichée est exactement son
+      <strong>degré</strong>. Comme c'est une coupe valide, elle ne peut pas être inférieure à la coupe
+      minimum <code>k</code>. Donc <strong>tout sommet a un degré ≥ k</strong> — c'est l'étape 1 de la
+      démonstration de la section 3, et elle tient en un clic.
+    </div>
+  </section>
+
+  <!-- ===================================================== 2 -->
+  <section id="contraction">
+    <span class="tag">l'algorithme — séance du 23/09</span>
+    <h2>Contracter, c'est fusionner — on ne supprime rien</h2>
+    <p class="lede">Choisis une arête et contracte-la. Ses deux extrémités deviennent un seul groupe,
+    et les arêtes qui sortent du groupe sont <strong>toutes conservées</strong>, y compris quand elles
+    deviennent parallèles. Seules les arêtes internes au groupe disparaissent.</p>
+    <div class="card">
+      <div class="split">
+        <div>
+          <svg class="fig" id="ctrfig" viewBox="0 0 520 250" role="img" aria-label="Graphe en cours de contraction"></svg>
+          <div class="row" style="margin-top:12px">
+            <label class="ctl" for="ctr-pick">arête</label>
+            <select id="ctr-pick"></select>
+            <button id="ctr-go" class="primary">Contracter</button>
+            <button id="ctr-rand">Au hasard</button>
+            <button id="ctr-reset">Recommencer</button>
+          </div>
+        </div>
+        <div>
+          <div class="counters">
+            <div><div class="t">groupes</div><div class="v" id="ctr-nb">6</div></div>
+            <div><div class="t">contractions</div><div class="v" id="ctr-c">0 / 4</div></div>
+          </div>
+          <div class="setline" id="ctr-groups"></div>
+          <div class="verdict" id="ctr-say"></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <b>Ce qui est aléatoire, c'est l'arête — jamais la coupe.</b> On ne choisit jamais <code>U</code>
+      et <code>U'</code>. On tire une arête uniformément, on la contracte, on recommence. La
+      bipartition finale est ce qu'il reste quand il ne subsiste que deux groupes : elle est
+      <em>subie</em>, pas choisie.
+    </div>
+  </section>
+
+  <!-- ===================================================== 3 -->
+  <section id="borne">
+    <span class="tag">la démonstration — à savoir refaire de tête</span>
+    <h2>Pourquoi la probabilité vaut <span class="mono">2 / n(n−1)</span></h2>
+    <p class="lede">On fixe une coupe minimum <code>C</code> de taille <code>k</code>. Elle survit si
+    l'algorithme ne contracte <em>jamais</em> une de ses arêtes. Fais varier <code>n</code>, puis
+    annule les termes un par un : le produit se télescope sous tes yeux.</p>
+    <div class="card">
+      <div class="card-b">
+        <div class="row">
+          <label class="ctl" for="n-slider">n = <span id="n-val" class="mono">6</span> sommets</label>
+          <input type="range" id="n-slider" min="4" max="14" value="6">
+          <button id="tel-step" class="primary">Annuler un terme</button>
+          <button id="tel-all">Tout annuler</button>
+          <button id="tel-reset">Remettre</button>
+        </div>
+        <div class="tw"><div class="prod" id="prod"></div></div>
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <div class="read">il reste</div>
+            <div class="big sm" id="tel-res">—</div>
+          </div>
+          <div style="text-align:right">
+            <div class="read">soit une chance de</div>
+            <div class="big sm" id="tel-pct">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-b">
+        <p class="lede" style="margin-bottom:10px">Les quatre lignes de la démonstration, dans l'ordre :</p>
+        <ol class="exam">
+          <li><span class="num">1</span><div><b>Tout sommet a un degré ≥ k</b><span>Sinon ce sommet seul formerait une coupe de valeur &lt; k — impossible puisque k est le minimum. Vérifiable en un clic dans la section 1.</span></div></li>
+          <li><span class="num">2</span><div><b>Donc m ≥ k·(n−i+1)/2 à l'étape i</b><span>La somme des degrés vaut 2m. Avec n−i+1 groupes restants, chacun de degré ≥ k, on obtient 2m ≥ k(n−i+1).</span></div></li>
+          <li><span class="num">3</span><div><b>P(tirer une arête de C à l'étape i) = k/m ≤ 2/(n−i+1)</b><span>C contient k arêtes parmi les m restantes, et la ligne 2 majore ce rapport. C'est là que k disparaît : la borne ne dépend plus que de n.</span></div></li>
+          <li><span class="num">4</span><div><b>P(survie) ≥ ∏ (1 − 2/(n−i+1)) = 2/n(n−1)</b><span>Produit pour i de 1 à n−2. Chaque facteur vaut (n−i−1)/(n−i+1) : numérateurs et dénominateurs s'annulent deux à deux, c'est le télescopage ci-dessus.</span></div></li>
+        </ol>
+      </div>
+    </div>
+    <div class="callout warn">
+      <b>Ce qui tombe à l'exam, c'est la ligne 1 et la ligne 3.</b> Le télescopage se reconstruit au
+      brouillon. L'argument « un sommet isolé forme une coupe valide, donc son degré majore k », lui,
+      ne se devine pas si on ne l'a pas vu.
+    </div>
+  </section>
+
+  <!-- ===================================================== 4 -->
+  <section id="expo">
+    <span class="tag">rappel de début de CM1</span>
+    <h2>Exponentiation rapide : <span class="mono">O(log n)</span> par mises au carré</h2>
+    <p class="lede">Choisis un exposant et déroule la version binaire itérative. À chaque tour, le bit
+    de poids faible décide si on accumule, puis <code>a</code> passe au carré suivant.</p>
+    <div class="card">
+      <div class="split">
+        <div>
+          <div class="row">
+            <label class="ctl" for="exp-n">n = <span id="exp-nv" class="mono">13</span></label>
+            <input type="range" id="exp-n" min="1" max="64" value="13">
+          </div>
+          <div class="row"><span class="read">n en binaire, poids fort à gauche</span></div>
+          <div class="bits" id="exp-bits"></div>
+          <div class="row" style="margin-top:12px">
+            <button id="exp-step" class="primary">Un tour</button>
+            <button id="exp-all">Tout dérouler</button>
+            <button id="exp-reset">Remettre</button>
+          </div>
+          <div class="callout">
+            <b>Le vrai énoncé.</b> La méthode, c'est la <strong>mise au carré</strong>, pas
+            « multiplier des matrices ». Elle marche pour toute opération associative : entiers,
+            matrices, polynômes, exponentiation modulaire.
+          </div>
+        </div>
+        <div>
+          <div class="tw">
+            <table class="data" id="exp-table">
+              <thead><tr><th>tour</th><th>n</th><th>bit</th><th>result</th><th>a devient</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="row" style="margin-top:12px;justify-content:space-between">
+            <div><div class="read">multiplications</div><div class="big sm good" id="exp-mul">0</div></div>
+            <div style="text-align:right"><div class="read">méthode naïve</div><div class="big sm bad" id="exp-naive">12</div></div>
+          </div>
+          <p class="read" style="margin-top:10px">Fibonacci : <code>O(n)</code> par programmation
+          dynamique, <code>O(log n)</code> en élevant la matrice [[1,1],[1,0]] à la puissance n.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 5 -->
+  <section id="tp">
+    <span class="tag">TP1 mincut · ~/Documents/AdvancedAlgorithms/TP1-mincut</span>
+    <h2>Où en est le code</h2>
+    <p class="lede">Le simulateur pas à pas a sa propre page : il déroule la boucle de contraction sur
+    le vrai code, avec <code>groupe[]</code>, <code>taille[]</code> et <code>membres[]</code> qui
+    bougent à chaque étape.</p>
+    <a class="linkcard" href="karger.html">
+      <div class="k">page du module</div>
+      <div class="t">Karger pas à pas →</div>
+      <div class="d">La boucle q13 déroulée tour par tour, les trois tableaux, et la ligne de code C surlignée.</div>
+    </a>
+    <div class="card">
+      <div class="card-b">
+        <div class="counters">
+          <div><div class="t">Q4 Q6 Q8 Q9</div><div class="v ok">codées</div></div>
+          <div><div class="t">Q12 ordre aléatoire</div><div class="v ok">codée</div></div>
+          <div><div class="t">Q13 boucle</div><div class="v ok">codée</div></div>
+          <div><div class="t">Q14 valeur_coupe</div><div class="v ok">codée</div></div>
+          <div><div class="t">Q15 → Q17</div><div class="v todo">à écrire</div></div>
+          <div><div class="t">Q18 → Q22</div><div class="v todo">expérimentation</div></div>
+        </div>
+        <div class="callout">
+          <b>Mesuré le 30/09.</b> Sur les six jeux de données, exactement <code>n−2</code> contractions
+          à chaque fois — jamais une de plus, jamais une de moins. Et sur <code>toygraph2</code>
+          (n = 8), une seule exécution sur dix a rendu la coupe 1. La borne de la section 3 donne
+          2/56, soit 3,6 % : neuf échecs sur dix, c'est précisément ce qu'elle annonce.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== 6 -->
+  <section id="exam">
+    <span class="tag">3 examens sur table · 2 × 30 min (25 % chacun) · 1 × 1h30 (50 %)</span>
+    <h2>Ce que le prof a dit de savoir</h2>
+    <ol class="exam">
+      <li><span class="num">01</span><div><b>Algorithme probabiliste</b><span>Fait ses choix au hasard pendant l'exécution : deux exécutions sur la même entrée peuvent se dérouler différemment, et rendre des résultats différents.</span></div></li>
+      <li><span class="num">02</span><div><b>Min cut : entrée et sortie</b><span>Entrée, un <strong>multigraphe</strong>. Sortie, une bipartition (U, U') de V(G), les deux non vides, qui minimise le nombre d'arêtes traversantes.</span></div></li>
+      <li><span class="num">03</span><div><b>Pourquoi un multigraphe</b><span>Parce que l'algorithme fusionne des sommets, et qu'une fusion crée naturellement des arêtes parallèles qu'il faut conserver : leur nombre est le poids de la coupe.</span></div></li>
+      <li><span class="num">04</span><div><b>La borne de Karger</b><span>Une itération rend une coupe minimum donnée avec probabilité ≥ 2/(n(n−1)). Savoir refaire les quatre lignes de la section 3.</span></div></li>
+      <li><span class="num">05</span><div><b>Union par taille</b><span>On renomme toujours les sommets du plus petit groupe. Un sommet n'est donc renommé que quand la taille de son groupe au moins double : au plus log₂(n) fois, d'où le O(n log n). Sans cette règle, pire cas en O(n²).</span></div></li>
+      <li><span class="num">06</span><div><b>Exponentiation rapide</b><span>a^n en O(log n) par mises au carré. Savoir écrire la récurrence (cas pair, cas impair) et la version itérative binaire.</span></div></li>
+      <li><span class="num">07</span><div><b>Fibonacci : deux façons d'éviter le recalcul</b><span>O(n) par programmation dynamique en stockant les résultats intermédiaires ; O(log n) par puissance de la matrice [[1,1],[1,0]].</span></div></li>
+    </ol>
+    <div class="callout">
+      <b>La consigne, mot pour mot.</b> Apprendre les CM par cœur — les questions de cours tombent
+      telles quelles. Finir les TP. Savoir refaire les TD de tête, sans les relire.
+    </div>
+  </section>
+
+  <footer class="page">
+    <p>Rien sur cette page ne va au-delà de la Q14. Les Q15 à Q17 attendent qu'on les dessine avant de les coder.</p>
+    <p>Les flashcards restent dans le vault : la répétition espacée relance au bon moment, une page web ne fait pas ça.</p>
+  </footer>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script src="../../assets/js/lib/graph.js"></script>
+<script src="js/cours.js"></script>
+</body>
+</html>

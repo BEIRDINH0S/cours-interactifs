@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cours interactifs — M1 informatique</title>
+<meta name="description" content="Les mecanismes de mes cours de M1, sous forme de choses a manipuler plutot qu'a relire.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/system.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <p class="eyebrow">M1 informatique · 2026-2027</p>
+    <h1>Cours interactifs</h1>
+    <p class="sub">Un module par matière. Chaque page prend un mécanisme du cours — une boucle, une
+    démonstration, un comportement matériel — et le rend manipulable, parce que le dérouler marche
+    mieux que le relire.</p>
+  </header>
+
+  <section style="margin-top:24px">
+    <span class="tag">modules</span>
+    <h2>Les matières</h2>
+    <p class="lede">Les pastilles vertes marchent déjà ; les ambres sont des squelettes en attente de contenu.</p>
+    <div class="cards" id="modules"></div>
+  </section>
+
+  <section>
+    <span class="tag">comment c'est fait</span>
+    <h2>Le principe</h2>
+    <div class="card">
+      <div class="card-b">
+        <ol class="exam" style="list-style:none">
+          <li><span class="num">01</span><div><b>Zéro dépendance, zéro build</b><span>HTML, CSS et JavaScript natifs. Pas de <code>npm install</code>, rien à compiler : on ouvre un fichier et ça marche, aujourd'hui comme dans deux ans.</span></div></li>
+          <li><span class="num">02</span><div><b>Un système de design unique</b><span><code>assets/css/system.css</code> porte toutes les couleurs et tous les composants. Les deux thèmes, clair et sombre, suivent celui du système.</span></div></li>
+          <li><span class="num">03</span><div><b>Des briques partagées</b><span><code>assets/js/lib/</code> fournit la figure de graphe, le contrôleur pas-à-pas et le panneau de code. Un nouveau module les réutilise au lieu de les réécrire.</span></div></li>
+          <li><span class="num">04</span><div><b>Les fiches restent dans le vault</b><span>Ce site sert à comprendre. La mémorisation, elle, a besoin d'un planificateur qui relance : c'est la répétition espacée d'Obsidian, et ça ne bouge pas.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page">
+    <p>Pour ajouter une matière : un dossier dans <code>modules/</code> et une entrée dans <code>modules.js</code>. C'est tout.</p>
+  </footer>
+</div>
+
+<script src="assets/js/lib/core.js"></script>
+<script src="modules.js"></script>
+<script src="assets/js/hub.js"></script>
+</body>
+</html>
