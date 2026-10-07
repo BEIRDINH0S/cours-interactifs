@@ -7,53 +7,28 @@
 <meta name="description" content="Pourquoi un programme ralentit quand ses donnees grossissent : les caches, et ce que leurs paliers racontent.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
 <link rel="stylesheet" href="../../assets/css/system.css">
 </head>
 <body>
 <div class="wrap">
 
-
   <header class="page">
-    <p class="eyebrow">sujet · en chantier</p>
     <h1>Hiérarchie mémoire</h1>
-    <p class="sub">Le même programme, les mêmes instructions, mais dix fois plus lent parce que le
-    tableau est plus grand. Ce sujet explique d'où vient la différence.</p>
+    <p class="sub">Le même programme, les mêmes instructions, mais dix fois plus lent parce que le tableau est plus grand. Ce sujet explique d'où vient la différence.</p>
   </header>
 
-  <section style="margin-top:26px">
-    <h2>La leçon à écrire</h2>
-    <p class="lede">Elle tournera autour d'une seule courbe : le temps d'accès moyen en fonction de
-    la taille des données parcourues. Trois choses à y rendre manipulables.</p>
-    <div class="card">
-      <div class="card-b">
-        <ol class="exam">
-          <li><span class="num">1</span><div><b>Faire apparaître les paliers</b><span>Tant que les données tiennent dans un niveau de cache, le temps reste plat. Il saute quand on déborde — et la position du saut donne la taille du niveau.</span></div></li>
-          <li><span class="num">2</span><div><b>Casser le prefetcher</b><span>Un parcours régulier est détecté par le processeur, qui précharge la suite. On ne mesure alors plus la latence mais le débit. Passer le parcours en aléatoire et voir la courbe changer de nature.</span></div></li>
-          <li><span class="num">3</span><div><b>Le palier qui n'arrive pas où on l'attend</b><span>L'associativité et la politique de remplacement décalent le saut. Selon le niveau, il apparaît à la taille du cache ou nettement au-delà.</span></div></li>
-        </ol>
-      </div>
-    </div>
-  </section>
+  <div class="section-titre">
+    <h2>Le parcours</h2>
+  </div>
+  <div class="parcours" id="parcours"></div>
 
-  <section>
-    <h2>Avant de l'écrire</h2>
-    <div class="callout warn">
-      <b>Une décision à prendre.</b> Simuler un modèle de cache propre, ou rejouer des mesures
-      réelles ? Les deux enseignent, mais pas la même chose : le modèle montre la théorie nette, la
-      mesure montre pourquoi la théorie ne suffit pas. Le plus probable : le modèle d'abord, puis une
-      étape finale qui confronte à des mesures.
-    </div>
-  </section>
-
-  <footer class="page">
-    <p>Pour transformer ce squelette en sujet vivant : ajouter une leçon à côté de ce fichier, puis
-    l'inscrire dans <code>modules.js</code>, champ <code>pages</code>.</p>
-  </footer>
 </div>
 
 <script src="../../assets/js/lib/core.js"></script>
 <script src="../../modules.js"></script>
+<script src="../../assets/js/lib/progres.js"></script>
 <script src="../../assets/js/lib/chrome.js"></script>
+<script src="../../assets/js/lib/sujet.js"></script>
 </body>
 </html>

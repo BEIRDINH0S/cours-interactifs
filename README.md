@@ -31,7 +31,7 @@ que l'ouverture directe d'un fichier (`file://`) fonctionne sans serveur.
 ## Structure
 
 ```
-index.html                 accueil, construite depuis modules.js
+index.html                 accueil : reprendre, a revoir, puis la table des matieres
 modules.js                 LA liste des sujets — le seul fichier a editer pour en ajouter un
 assets/
   css/system.css           jetons de couleur, typographie, composants partages
@@ -39,6 +39,8 @@ assets/
   js/lib/
     core.js                helpers DOM et SVG, enveloppe convexe, Fisher-Yates
     chrome.js              la navigation : barre haute, selecteur de sujet, theme, badges
+    progres.js             ce que le site sait de toi : un seul lecteur de localStorage
+    sujet.js               le parcours d'un sujet, avec l'etat de chaque etape
     lesson.js              le lecteur de lecon : rail, objectifs bloquants, progression
     cards.js               revision par cartes et planification par boites
     graph.js               figure de graphe reutilisable (clic sommet / clic arete)
@@ -60,6 +62,20 @@ modules/
     js/lecon-data-race.js, js/cartes.js
   architectures-processeurs/   « Hierarchie memoire », squelette servant de patron
 ```
+
+## Parti pris visuel
+
+Le sujet du site, ce sont des mecanismes qui **s'executent**. D'ou deux regles
+qui tiennent tout le reste :
+
+- **Literata pour le texte, IBM Plex Mono pour ce qui est litteralement du code
+  ou une valeur.** La chasse fixe porte un sens ; elle n'est pas un effet.
+- **L'ambre ne designe que ce qui est en cours.** Etape courante, arete tiree,
+  instruction qui s'execute, cartes a revoir. Jamais une decoration.
+
+Trois choses sont volontairement absentes, parce qu'elles sont les tics du
+design genere : les etiquettes en capitales au-dessus des titres, les meta
+jointes par des points medians, et les fleches collees au texte des liens.
 
 ## La navigation
 
@@ -95,6 +111,8 @@ Rien d'autre : pas de manifeste a regenerer, pas de build a relancer.
   en navigation privee elle repart simplement de zero.
 - `CI.__lastFig`, `CI.__lastSim` et `CI.__cardsInternals` sont des points d'accroche
   pour les tests automatises, pas une API.
-- Chaque page charge `core.js`, puis `modules.js`, puis `chrome.js`, dans cet ordre.
+- Chaque page charge `core.js`, `modules.js`, `progres.js`, puis `chrome.js`.
+- Tout ce qui lit l'avancement passe par `progres.js` : l'accueil, la barre et le
+  parcours d'un sujet racontent ainsi la meme chose.
 - Une lecon ne contient que ses etapes : le lecteur qui les enchaine est commun
   a tout le site (`assets/js/lib/lesson.js`).

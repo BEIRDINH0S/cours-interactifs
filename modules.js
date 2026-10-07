@@ -20,21 +20,25 @@ window.CI_MODULES = [
             "résout quand même un problème que l'énumération ne peut pas atteindre.",
     href: "modules/advanced-algorithms/index.html",
     tags: ["1 leçon", "1 atelier", "16 cartes"],
+    aVenir: ["Répéter pour fiabiliser", "Exponentiation rapide"],
     pages: [
       {
         titre: "Coupe minimum",
+        type: "lecon",
         href: "modules/advanced-algorithms/lecon-mincut.html",
-        resume: "Dix étapes, de la définition à la démonstration de la borne.",
+        resume: "De la définition à la démonstration de la borne.",
         statut: "vivant"
       },
       {
         titre: "L'algorithme instruction par instruction",
+        type: "atelier",
         href: "modules/advanced-algorithms/karger.html",
         resume: "L'implémentation en C et l'état de ses tableaux, tour par tour.",
         statut: "vivant"
       },
       {
         titre: "Réviser",
+        type: "revision",
         href: "modules/advanced-algorithms/revision.html",
         resume: "16 cartes, en répétition espacée.",
         statut: "vivant"
@@ -50,15 +54,18 @@ window.CI_MODULES = [
             "l'ordre, et comment reprendre la main dessus.",
     href: "modules/concurrence/index.html",
     tags: ["1 leçon", "18 cartes"],
+    aVenir: ["Attendre une condition", "Un verrou ou mille", "Découper une boucle"],
     pages: [
       {
         titre: "Data race et exclusion mutuelle",
+        type: "lecon",
         href: "modules/concurrence/lecon-data-race.html",
         resume: "Fabriquer une course à la main, puis la supprimer avec un verrou.",
         statut: "vivant"
       },
       {
         titre: "Réviser",
+        type: "revision",
         href: "modules/concurrence/revision.html",
         resume: "18 cartes, en répétition espacée.",
         statut: "vivant"
@@ -74,6 +81,7 @@ window.CI_MODULES = [
             "et ce que les paliers d'une courbe de temps d'accès révèlent des caches.",
     href: "modules/architectures-processeurs/index.html",
     tags: ["leçon à venir"],
+    aVenir: ["Les paliers d'une courbe d'accès"],
     pages: []
   }
 ];

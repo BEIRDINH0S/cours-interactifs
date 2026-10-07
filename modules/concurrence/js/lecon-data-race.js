@@ -452,7 +452,7 @@
         ]));
         var suite = CI.h("a", { "class": "linkcard", href: "index.html" }, [
           CI.h("div", { "class": "k", text: "même sujet" }),
-          CI.h("div", { "class": "t", text: "Retour à « Mémoire partagée » →" }),
+          CI.h("div", { "class": "t", text: "Retour au sujet" }),
           CI.h("div", { "class": "d", text: "Les leçons suivantes : sémaphores, moniteurs, et la parallélisation d'une boucle." })
         ]);
         api.tools([suite]);

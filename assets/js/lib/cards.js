@@ -290,7 +290,7 @@ window.CI = window.CI || {};
         sauver(cfg.key, etat);
         score[reussi ? "su" : "rate"]++;
         if (!reussi) file.push(carte);        // une carte ratee repasse en fin de session
-        var b = CI.h("button", { "class": "primary", text: "Suivante ▶" });
+        var b = CI.h("button", { "class": "primary", text: "Suivante" });
         b.onclick = function () { pos++; suite(); };
         CI.clear(CI.el(cfg.els.foot)).appendChild(b);
         b.focus();

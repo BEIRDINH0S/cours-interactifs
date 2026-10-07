@@ -40,6 +40,15 @@ window.CI = window.CI || {};
     if (opts.titre) CI.el("lesson-title").textContent = opts.titre;
     if (opts.sousTitre) CI.el("lesson-sub").textContent = opts.sousTitre;
 
+    // l'accueil propose de reprendre la derniere chose ouverte
+    if (CI.progres && opts.titre) {
+      CI.progres.marquer({
+        href: "modules/" + (/\/modules\/([^/]+)\//.exec(window.location.pathname) || [])[1] +
+              "/" + window.location.pathname.split("/").pop(),
+        titre: opts.titre
+      });
+    }
+
     CI.__lastFig = fig;   // point d'accroche pour les tests automatises
 
     try {
@@ -161,7 +170,7 @@ window.CI = window.CI || {};
       }
 
       CI.el("cont").disabled = !!s.goal;
-      CI.el("cont").textContent = (i === steps.length - 1) ? "Revoir le début" : "Continuer ▶";
+      CI.el("cont").textContent = (i === steps.length - 1) ? "Revoir le début" : "Continuer";
       CI.el("back").disabled = (i === 0);
       CI.el("foot-note").textContent = s.goal ? "Valide l'objectif pour continuer." : "";
 

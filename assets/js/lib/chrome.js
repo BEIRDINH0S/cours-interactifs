@@ -29,34 +29,25 @@ window.CI = window.CI || {};
 
   /* ------------------------------------------------ avancement */
 
-  function lire(cle) {
-    try { return window.localStorage.getItem(cle); } catch (e) { return null; }
-  }
-
-  /** « 4/10 » pour une lecon entamee, rien sinon. */
+  /* Les deux compteurs de la barre viennent du meme endroit que l'accueil :
+     assets/js/lib/progres.js. Sans lui, la barre s'affiche sans badges. */
   function avancementLecon(href) {
-    var nom = href.split("/").pop().replace(/\.html$/, "");
-    var cle = nom.replace(/^lecon-/, "lecon-") + "-progres";
-    var pos = parseInt(lire(cle), 10);
-    var total = parseInt(lire(cle + "-total"), 10);
-    if (isNaN(pos) || isNaN(total)) return null;
-    return (pos + 1) + "/" + total;
+    if (!CI.progres) return null;
+    var l = CI.progres.lecon(href);
+    return l ? (l.etape + "/" + l.total) : null;
   }
 
-  /** Nombre de cartes a revoir maintenant, nouvelles comprises. */
   function cartesDues(slug) {
-    var cle = "cartes-" + slug;
-    var total = parseInt(lire(cle + "-total"), 10);
-    if (isNaN(total)) return null;
-    var etat;
-    try { etat = JSON.parse(lire(cle)) || {}; } catch (e) { etat = {}; }
-    var vues = Object.keys(etat), now = Date.now(), dues = 0;
-    vues.forEach(function (id) { if (now >= (etat[id].du || 0)) dues++; });
-    dues += Math.max(0, total - vues.length);     // jamais vues = a revoir
-    return dues;
+    if (!CI.progres) return null;
+    var q = CI.progres.paquet(slug);
+    return q ? q.dues : null;
   }
 
   /* ------------------------------------------------ theme */
+
+  function lire(cle) {
+    try { return window.localStorage.getItem(cle); } catch (e) { return null; }
+  }
 
   function themeInitial() {
     var t = lire("theme");

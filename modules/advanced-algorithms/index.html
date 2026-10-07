@@ -7,89 +7,28 @@
 <meta name="description" content="Resoudre un probleme de graphe en tirant au hasard : la coupe minimum et l'algorithme de Karger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
 <link rel="stylesheet" href="../../assets/css/system.css">
 </head>
 <body>
 <div class="wrap">
 
-
   <header class="page">
-    <p class="eyebrow">sujet</p>
     <h1>Graphes et aléatoire</h1>
-    <p class="sub">Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps,
-    résout quand même un problème que l'énumération ne peut pas atteindre.</p>
+    <p class="sub">Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps, résout quand même un problème que l'énumération ne peut pas atteindre.</p>
   </header>
 
-  <section style="margin-top:26px">
-    <h2>Commencer</h2>
-    <p class="lede">Dix étapes, chacune avec quelque chose à manipuler. Compte un quart d'heure.</p>
-    <div class="cards">
-      <a class="linkcard" href="lecon-mincut.html">
-        <div class="k">leçon · 10 étapes</div>
-        <div class="t">Coupe minimum</div>
-        <div class="d">Séparer un graphe en deux au moindre coût. Tu construis des coupes à la main,
-        tu découvres pourquoi les énumérer est impossible, puis tu fais tourner l'algorithme de
-        Karger et tu démontres sa probabilité de réussite.</div>
-        <div class="meta">
-          <span class="pill live">interactif</span>
-          <span class="pill">coupes</span>
-          <span class="pill">contraction</span>
-          <span class="pill">probabilités</span>
-        </div>
-      </a>
+  <div class="section-titre">
+    <h2>Le parcours</h2>
+  </div>
+  <div class="parcours" id="parcours"></div>
 
-      <a class="linkcard" href="karger.html">
-        <div class="k">atelier</div>
-        <div class="t">L'algorithme, instruction par instruction</div>
-        <div class="d">Le même algorithme vu depuis son implémentation en C : à chaque tour de
-        boucle, l'état des trois tableaux et la ligne exécutée. Pour qui veut le coder.</div>
-        <div class="meta">
-          <span class="pill live">interactif</span>
-          <span class="pill">C</span>
-          <span class="pill">union-find</span>
-        </div>
-      </a>
-      <a class="linkcard" href="revision.html">
-        <div class="k">révision · 16 cartes</div>
-        <div class="t">Réviser ce sujet</div>
-        <div class="d">Les définitions, les étapes de la démonstration, la boucle de contraction à compléter, et le mélange de Fisher-Yates à reconnaître parmi deux versions dont une est biaisée.</div>
-        <div class="meta">
-          <span class="pill live">répétition espacée</span>
-          <span class="pill">questions</span>
-          <span class="pill">code à compléter</span>
-          <span class="pill">choix de code</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section>
-    <h2>Ensuite</h2>
-    <p class="lede">Les suites naturelles de ce sujet, pas encore écrites.</p>
-    <div class="cards">
-      <div class="card muted">
-        <div class="card-b">
-          <div class="k" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)">leçon à venir</div>
-          <div style="font-weight:600;margin:4px 0">Répéter pour fiabiliser</div>
-          <div style="color:var(--ink-2);font-size:13.5px">Une chance sur quinze suffit si on
-          recommence. Combien de fois faut-il relancer pour se tromper moins d'une fois sur mille ?</div>
-        </div>
-      </div>
-      <div class="card muted">
-        <div class="card-b">
-          <div class="k" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)">leçon à venir</div>
-          <div style="font-weight:600;margin:4px 0">Exponentiation rapide</div>
-          <div style="color:var(--ink-2);font-size:13.5px">Calculer a<sup>n</sup> en log n
-          multiplications par mises au carré successives, et pourquoi ça marche aussi sur les matrices.</div>
-        </div>
-      </div>
-    </div>
-  </section>
 </div>
 
 <script src="../../assets/js/lib/core.js"></script>
 <script src="../../modules.js"></script>
+<script src="../../assets/js/lib/progres.js"></script>
 <script src="../../assets/js/lib/chrome.js"></script>
+<script src="../../assets/js/lib/sujet.js"></script>
 </body>
 </html>

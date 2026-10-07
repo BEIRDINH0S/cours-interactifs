@@ -494,7 +494,7 @@
         ]));
         var atelier = CI.h("a", { "class": "linkcard", href: "karger.html" }, [
           CI.h("div", { "class": "k", text: "pour aller plus loin" }),
-          CI.h("div", { "class": "t", text: "Dérouler l'algorithme, instruction par instruction →" }),
+          CI.h("div", { "class": "t", text: "Dérouler l'algorithme, instruction par instruction" }),
           CI.h("div", { "class": "d", text: "L'atelier montre l'implémentation en C et l'état de ses tableaux à chaque tour de boucle." })
         ]);
         api.tools([atelier]);

@@ -7,47 +7,33 @@
 <meta name="description" content="Des sujets d'informatique expliques par la manipulation : une idee par ecran, quelque chose a faire a chaque fois.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
 <link rel="stylesheet" href="assets/css/system.css">
 </head>
 <body>
 <div class="wrap">
 
-  <header class="page">
-    <p class="eyebrow">apprendre en manipulant</p>
-    <h1>Les sujets</h1>
-    <p class="sub">Chaque leçon prend un mécanisme et le rend manipulable : une idée par écran,
-    quelque chose à faire à chaque fois, et un objectif à valider avant de continuer. On n'avance
-    pas en lisant, on avance en essayant.</p>
-  </header>
+  <section class="reprise" id="reprendre"></section>
 
-  <section style="margin-top:24px">
-    <h2>Choisis un sujet</h2>
-    <p class="lede">Les pastilles vertes sont jouables ; les ambres attendent leur contenu.</p>
-    <div class="cards" id="modules"></div>
-  </section>
+  <section class="revoir" id="revoir"></section>
 
-  <section>
-    <h2>Comment c'est construit</h2>
-    <div class="card">
-      <div class="card-b">
-        <ol class="exam" style="list-style:none">
-          <li><span class="num">01</span><div><b>Une idée par écran</b><span>Pas de pavé à lire : deux ou trois phrases, une manipulation, un objectif. On passe à la suite quand l'objectif est atteint.</span></div></li>
-          <li><span class="num">02</span><div><b>Un exemple unique par leçon</b><span>Le même graphe, le même tableau, du début à la fin — pour que chaque nouvelle idée s'ajoute sur un terrain déjà familier.</span></div></li>
-          <li><span class="num">03</span><div><b>Zéro dépendance, zéro build</b><span>HTML, CSS et JavaScript natifs. Pas de <code>npm install</code>, rien à compiler : on ouvre un fichier et ça marche.</span></div></li>
-          <li><span class="num">04</span><div><b>Des briques partagées</b><span><code>assets/js/lib/</code> fournit la figure de graphe, le contrôleur pas-à-pas et le panneau de code. Un nouveau sujet les réutilise au lieu de les réécrire.</span></div></li>
-        </ol>
-      </div>
-    </div>
-  </section>
+  <div class="section-titre">
+    <h2>Les sujets</h2>
+  </div>
+  <div class="sujets" id="sujets"></div>
 
   <footer class="page">
-    <p>Pour ajouter un sujet : un dossier dans <code>modules/</code> et une entrée dans <code>modules.js</code>. C'est tout.</p>
+    <p>Une leçon prend un mécanisme — une boucle, une preuve, un entrelacement — et le rend
+    manipulable : une idée par écran, quelque chose à faire à chaque fois, et un objectif à valider
+    avant de continuer. On n'avance pas en lisant, on avance en essayant.</p>
+    <p>Les révisions reviennent d'elles-mêmes : une carte ratée revient à la session suivante, une
+    carte sue s'éloigne. Tout l'avancement reste dans ce navigateur.</p>
   </footer>
 </div>
 
 <script src="assets/js/lib/core.js"></script>
 <script src="modules.js"></script>
+<script src="assets/js/lib/progres.js"></script>
 <script src="assets/js/lib/chrome.js"></script>
 <script src="assets/js/hub.js"></script>
 </body>
