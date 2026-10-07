@@ -304,6 +304,140 @@ window.CI_CARTES = [
     ],
     why: "La dernière tranche déborderait sans le <code>min</code> : avec un arrondi au-dessus, " +
          "<code>N * pas</code> dépasse <code>n</code>."
+  },
+
+  /* ---------------------------------------------------------- a completer : Java */
+  {
+    type: "trous", tag: "verrou explicite",
+    q: "Complète le compteur à verrou explicite. Un oubli ici bloque tout le programme.",
+    code: [
+      "private final Lock verrou = new ReentrantLock();",
+      "private int val = 0;",
+      "",
+      "void incr(int n) {",
+      "    verrou.{0}();",
+      "    {1} { val = val + n; }",
+      "    {2} { verrou.{3}(); }",
+      "}"
+    ],
+    trous: [
+      { sol: "lock", opts: ["lock", "unlock", "wait"] },
+      { sol: "try", opts: ["try", "finally", "catch"] },
+      { sol: "finally", opts: ["finally", "catch", "else"] },
+      { sol: "unlock", opts: ["unlock", "lock", "release"] }
+    ],
+    why: "Le <code>finally</code> n'est pas facultatif : sans lui, une exception dans la section " +
+         "critique laisse le verrou pris pour toujours. C'est ce que <code>synchronized</code> " +
+         "fait gratuitement."
+  },
+  {
+    type: "trous", tag: "non bloquant",
+    q: "Complète la boucle de reprise. Attention à l'endroit où la valeur est relue.",
+    code: [
+      "int v;",
+      "{0} {",
+      "    v = c.get();",
+      "} {1} (!c.compareAndSet(v, v {2} n));"
+    ],
+    trous: [
+      { sol: "do", opts: ["do", "while", "for"] },
+      { sol: "while", opts: ["while", "until", "if"] },
+      { sol: "+", opts: ["+", "-", "*"] }
+    ],
+    why: "La relecture doit être <strong>dans</strong> la boucle. Si tu lis une seule fois avant " +
+         "d'entrer, un échec te condamne à échouer indéfiniment : la case ne reviendra jamais à " +
+         "la valeur que tu avais lue."
+  },
+  {
+    type: "trous", tag: "sémaphore",
+    q: "Complète l'acquire qui ne laisse jamais le compteur passer sous zéro.",
+    code: [
+      "public void acquire() {",
+      "    int v = val.get();",
+      "    while (v {0} 1 || !val.compareAndSet(v, v {1} 1)) {",
+      "        v = val.{2}();",
+      "    }",
+      "}"
+    ],
+    trous: [
+      { sol: "<", opts: ["<", ">", ">="] },
+      { sol: "-", opts: ["-", "+"] },
+      { sol: "get", opts: ["get", "set", "decrementAndGet"] }
+    ],
+    why: "La garde <code>v &lt; 1</code> précède le CAS : on ne décrémente que si on en a le droit. " +
+         "C'est ce qui distingue cette version de celle qui décrémente puis répare."
+  },
+  {
+    type: "trous", tag: "exclusion k-mutuelle",
+    q: "Complète le moniteur d'un parking à k places — la forme même de ton épreuve.",
+    code: [
+      "private int libres;",
+      "",
+      "public synchronized void entrer() throws InterruptedException {",
+      "    {0} (libres {1} 0) {",
+      "        {2}();",
+      "    }",
+      "    libres--;",
+      "}",
+      "",
+      "public synchronized void sortir() {",
+      "    libres++;",
+      "    {3}();",
+      "}"
+    ],
+    trous: [
+      { sol: "while", opts: ["while", "if"] },
+      { sol: "==", opts: ["==", "!=", ">"] },
+      { sol: "wait", opts: ["wait", "sleep", "notify"] },
+      { sol: "notifyAll", opts: ["notifyAll", "notify", "wait"] }
+    ],
+    why: "Exactement le patron du moniteur, avec k places au lieu d'une. <code>while</code> parce " +
+         "qu'un réveillé doit revérifier, <code>notifyAll</code> parce qu'un signal unique peut se perdre."
+  },
+  {
+    type: "trous", tag: "parallélisation",
+    q: "Complète le découpage en deux moitiés. L'ordre des quatre dernières lignes compte.",
+    code: [
+      "int[] res = new int[2];",
+      "int n = tab.length;",
+      "",
+      "Thread t0 = new Thread(() -> res[0] = compter(tab, 0, n{0}2, c));",
+      "Thread t1 = new Thread(() -> res[1] = compter(tab, n{0}2, n, c));",
+      "",
+      "t0.{1}(); t1.{1}();",
+      "t0.{2}(); t1.{2}();",
+      "return res[0] + res[1];"
+    ],
+    trous: [
+      { sol: "/", opts: ["/", "*", "%"] },
+      { sol: "start", opts: ["start", "run", "join"] },
+      { sol: "join", opts: ["join", "start", "wait"] }
+    ],
+    why: "<code>start()</code> lance un vrai fil ; <code>run()</code> exécuterait simplement la " +
+         "méthode dans le fil courant, sans aucun parallélisme. Et les deux <code>join()</code> " +
+         "doivent précéder la lecture de <code>res</code>, sinon on additionne des cases pas encore écrites."
+  },
+  {
+    type: "trous", tag: "parallélisation",
+    q: "Complète la version à tâches et futurs.",
+    code: [
+      "List<Future<Integer>> futurs = new ArrayList<>();",
+      "",
+      "for (int i = 0; i < N; i++) {",
+      "    final int k = i;",
+      "    futurs.add(pool.{0}(() -> compter(tab, k*pas, (k+1)*pas, c)));",
+      "}",
+      "",
+      "int total = 0;",
+      "for (Future<Integer> f : futurs) total += f.{1}();"
+    ],
+    trous: [
+      { sol: "submit", opts: ["submit", "execute", "start"] },
+      { sol: "get", opts: ["get", "join", "run"] }
+    ],
+    why: "<code>submit</code> rend un <code>Future</code> ; <code>execute</code> ne rend rien et ne " +
+         "permettrait pas de récupérer les totaux partiels. <code>f.get()</code> bloque jusqu'au " +
+         "résultat, exactement comme un join — mais il rend une valeur."
   }
 
 ];

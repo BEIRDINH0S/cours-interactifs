@@ -152,6 +152,52 @@
       }
     },
 
+    {
+      chap: "Le compteur",
+      titre: "Ce qu'incrementAndGet fait pour toi",
+      say: "<p class='say'>Un <code>AtomicInteger</code> n'a rien d'une boîte noire : la boucle de " +
+           "reprise que tu viens de dérouler, c'est <strong>exactement</strong> ce qu'il fait — " +
+           "sauf qu'elle est descendue d'un étage.</p>",
+      goal: "Que fait <code>incrementAndGet()</code> sous le capot ?",
+      mount: function (api) {
+        var code = CI.h("pre", { "class": "codeblock" });
+        code.textContent =
+          "// ce que tu écris\n" +
+          "int v;\n" +
+          "do { v = c.get(); }\n" +
+          "while (!c.compareAndSet(v, v + 1));\n\n" +
+          "// ce que tu appelles\n" +
+          "c.incrementAndGet();";
+        api.host.appendChild(code);
+
+        var choix = [
+          { t: "La même boucle de reprise, descendue dans la JVM puis dans le processeur",
+            ok: true,
+            why: "Oui. La JVM remplace l'appel par l'instruction machine qui va bien : sur x86 un " +
+                 "<code>lock xadd</code>, qui fait l'addition atomiquement ; sur l'ARM de ton Mac, " +
+                 "une paire charger-exclusif / stocker-conditionnel qui <strong>retente si un " +
+                 "autre cœur est passé entre les deux</strong>. La boucle n'a pas disparu, elle " +
+                 "est devenue si courte qu'elle ne coûte presque rien." },
+          { t: "Il pose un verrou interne, mais très rapide", ok: false,
+            why: "Non, et c'est la différence qui compte : un verrou peut interbloquer et faire " +
+                 "attendre. Ici, un fil qui échoue ne bloque personne — il refait un tour." },
+          { t: "Il désactive les interruptions le temps de l'opération", ok: false,
+            why: "Non. C'est une technique de noyau sur un seul cœur ; elle ne protégerait de rien " +
+                 "contre un autre cœur qui écrit la même case au même instant." }
+        ];
+        var btns = choix.map(function (c) {
+          var b = CI.h("button", { "class": "card-opt", text: c.t });
+          b.onclick = function () {
+            b.className = "card-opt " + (c.ok ? "right" : "wrong");
+            api.fb(c.why, c.ok ? "ok" : "ko");
+            if (c.ok) api.solve();
+          };
+          return b;
+        });
+        api.host.appendChild(CI.h("div", { "class": "card-opts", style: { marginTop: "14px" } }, btns));
+      }
+    },
+
     /* ========================================== chapitre 2 : attendre */
 
     {

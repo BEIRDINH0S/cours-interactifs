@@ -19,7 +19,7 @@ window.CI_MODULES = [
     resume: "Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps, " +
             "résout quand même un problème que l'énumération ne peut pas atteindre.",
     href: "modules/advanced-algorithms/index.html",
-    tags: ["1 leçon", "1 atelier", "16 cartes"],
+    tags: ["1 leçon", "1 atelier", "20 cartes"],
     aVenir: ["Répéter pour fiabiliser", "Exponentiation rapide"],
     pages: [
       {
@@ -40,7 +40,7 @@ window.CI_MODULES = [
         titre: "Réviser",
         type: "revision",
         href: "modules/advanced-algorithms/revision.html",
-        resume: "16 cartes, en répétition espacée.",
+        resume: "20 cartes, en répétition espacée.",
         statut: "vivant"
       }
     ]
@@ -53,7 +53,7 @@ window.CI_MODULES = [
     resume: "Deux fils d'exécution, une seule mémoire. Ce qui se passe quand on ne décide pas de " +
             "l'ordre, et comment reprendre la main dessus.",
     href: "modules/concurrence/index.html",
-    tags: ["2 leçons", "23 cartes"],
+    tags: ["2 leçons", "29 cartes"],
     aVenir: ["Un verrou ou mille", "Les files de tâches"],
     pages: [
       {
@@ -74,7 +74,7 @@ window.CI_MODULES = [
         titre: "Réviser",
         type: "revision",
         href: "modules/concurrence/revision.html",
-        resume: "23 cartes, en répétition espacée.",
+        resume: "29 cartes, en répétition espacée.",
         statut: "vivant"
       }
     ]

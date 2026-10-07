@@ -194,5 +194,90 @@ window.CI_CARTES = [
     q: "Sur quoi repose l'exponentiation rapide, et à quoi s'applique-t-elle ?",
     a: "Sur la <strong>mise au carré</strong> — pas sur les matrices. Elle marche pour toute " +
        "opération <strong>associative</strong> : entiers, matrices, polynômes, exponentiation modulaire."
+  },
+
+  /* ---------------------------------------------------------- a completer : C */
+  {
+    type: "trous", tag: "union par taille",
+    q: "Complète la contraction. Une seule de ces comparaisons donne le O(n log n).",
+    code: [
+      "grand = groupe[u];",
+      "petit = groupe[v];",
+      "if (grand == petit) return;",
+      "",
+      "if (taille[petit] {0} taille[grand]) {",
+      "    tmp = grand; grand = petit; petit = tmp;",
+      "}",
+      "",
+      "p = membres[{1}]->prem;",
+      "while (p != NULL) {",
+      "    groupe[p->node] = {2};",
+      "    p = p->suiv;",
+      "}"
+    ],
+    trous: [
+      { sol: ">", opts: [">", "<", "=="] },
+      { sol: "petit", opts: ["petit", "grand"] },
+      { sol: "grand", opts: ["grand", "petit"] }
+    ],
+    why: "On parcourt toujours les membres du <strong>petit</strong> groupe pour les renommer vers " +
+         "le grand. Inverser rendrait le pire cas quadratique."
+  },
+  {
+    type: "trous", tag: "mélange",
+    q: "Complète Fisher-Yates. La borne du tirage est tout l'enjeu.",
+    code: [
+      "for (i = 0; i < m - 1; i++) {",
+      "    j = {0} + rand() % (m {1} i);",
+      "",
+      "    tmp      = ordre[i];",
+      "    ordre[i] = ordre[j];",
+      "    ordre[j] = tmp;",
+      "}"
+    ],
+    trous: [
+      { sol: "i", opts: ["i", "0", "1"] },
+      { sol: "-", opts: ["-", "+"] }
+    ],
+    why: "Tirer j dans <code>[i, m-1]</code>, donc parmi les positions pas encore fixées. Avec " +
+         "<code>rand() % m</code>, la distribution est biaisée : mᵐ chemins d'exécution pour m! " +
+         "permutations, et m! ne divise pas mᵐ."
+  },
+  {
+    type: "trous", tag: "exponentiation rapide",
+    q: "Complète la récurrence de l'exponentiation rapide.",
+    code: [
+      "a^n = 1                       si n = 0",
+      "a^n = (a^(n{0}2))^2            si n est pair",
+      "a^n = a {1} (a^((n-1)/2))^2    si n est impair"
+    ],
+    trous: [
+      { sol: "/", opts: ["/", "-", "*"] },
+      { sol: "*", opts: ["*", "+", "/"] }
+    ],
+    why: "Le cas impair « consomme » un facteur <code>a</code> pour retomber sur un exposant pair. " +
+         "Chaque étape divise l'exposant par deux, d'où le log."
+  },
+  {
+    type: "trous", tag: "valeur d'une coupe",
+    q: "Complète le comptage des arêtes traversantes. Un test manquant double le résultat.",
+    code: [
+      "for (u = 0; u < g->n; u++) {",
+      "    p = g->links[u]->prem;",
+      "    while (p != NULL) {",
+      "        if (p->node {0} u",
+      "            && groupe[u] {1} groupe[p->node])",
+      "            nb++;",
+      "        p = p->suiv;",
+      "    }",
+      "}"
+    ],
+    trous: [
+      { sol: "<", opts: ["<", ">", "=="] },
+      { sol: "!=", opts: ["!=", "==", "<"] }
+    ],
+    why: "Chaque arête figure dans les <strong>deux</strong> listes d'adjacence. Le test " +
+         "<code>p-&gt;node &lt; u</code> n'en retient qu'une occurrence."
   }
+
 ];
