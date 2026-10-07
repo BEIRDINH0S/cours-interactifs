@@ -33,6 +33,13 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
+      # GitHub Pages sert les fichiers avec max-age=600 et ne laisse pas regler
+      # cet en-tete : sans cela, une page fraiche peut etre servie avec une CSS
+      # mise en cache dix minutes plus tot, donc sans styles. On appose la
+      # version du commit aux URL locales pour que le cache ne resserve rien.
+      - name: Versionner les feuilles de style et les scripts
+        run: python3 outils/versionner-assets.py "$GITHUB_SHA"
+
       # Le site n'a pas d'etape de construction : on televerse le depot tel quel.
       - uses: actions/upload-pages-artifact@v3
         with:
