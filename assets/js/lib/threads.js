@@ -12,6 +12,14 @@
      {k:"store",  v:"c", r:"r1"}     c  <- r1
      {k:"lock",   l:"A"}             bloque tant que le verrou est pris
      {k:"unlock", l:"A"}
+     {k:"spin",   v:"val", seuil:1}  attente active : tourne a vide SANS lacher
+                                     le verrou, tant que mem[v] < seuil
+     {k:"wait",   l:"A"}             lache le verrou et s'endort
+     {k:"notify", l:"A", tous:true}  reveille un dormeur, ou tous
+     {k:"cas",    v:"c", r:"r", echec:3}
+                                     compare-and-set : si mem[v] vaut le
+                                     registre, ecrit r+1 ; sinon saute a
+                                     l'instruction "echec" (la relance)
      {k:"note",   txt:"..."}         ligne inerte, pour commenter
 
    Usage :
@@ -35,6 +43,10 @@ window.CI = window.CI || {};
       case "store":  return ins.v + " ← " + ins.r;
       case "lock":   return "lock(" + ins.l + ")";
       case "unlock": return "unlock(" + ins.l + ")";
+      case "spin":   return "while (" + ins.v + " < " + ins.seuil + ") ;";
+      case "wait":   return "wait()";
+      case "notify": return ins.tous ? "notifyAll()" : "notify()";
+      case "cas":    return "compareAndSet(" + ins.r + ", " + ins.r + "+1)";
       default:       return ins.txt || "";
     }
   }
@@ -53,7 +65,12 @@ window.CI = window.CI || {};
     this.locks = {};
     (cfg.locks || []).forEach(function (l) { this.locks[l] = null; }, this);
     this.threads = cfg.threads.map(function (t) {
-      return { name: t.name, code: t.code, pc: 0, regs: {}, blocked: false };
+      return {
+        name: t.name, code: t.code, pc: 0, regs: {},
+        dort: false,          // endormi sur wait(), hors de la file du verrou
+        reprend: false,       // reveille, mais doit rattraper le verrou
+        tours: 0              // tours d'attente active brules
+      };
     });
     this.history = [];
     this.render();
@@ -67,11 +84,30 @@ window.CI = window.CI || {};
     return this.threads.every(function (_, i) { return this.finished(i); }, this);
   };
 
-  /** Un fil est bloque s'il attend un verrou detenu par un autre. */
+  /** Un fil est bloque s'il dort, s'il attend un verrou, ou s'il le rattrape. */
   ThreadSim.prototype.isBlocked = function (i) {
     if (this.finished(i)) return false;
-    var ins = this.threads[i].code[this.threads[i].pc];
+    var t = this.threads[i];
+    if (t.dort) return true;
+    if (t.reprend) return this.locks[this.verrouDe(i)] !== null;
+    var ins = t.code[t.pc];
     return ins.k === "lock" && this.locks[ins.l] !== null && this.locks[ins.l] !== i;
+  };
+
+  /** Le verrou qu'un fil endormi devra reprendre : celui de son wait(). */
+  ThreadSim.prototype.verrouDe = function (i) {
+    var t = this.threads[i];
+    for (var k = t.pc - 1; k >= 0; k--) {
+      if (t.code[k].k === "wait") return t.code[k].l;
+    }
+    return Object.keys(this.locks)[0];
+  };
+
+  /** Un fil qui tourne a vide avance sans jamais progresser. */
+  ThreadSim.prototype.tourneAVide = function (i) {
+    if (this.finished(i)) return false;
+    var ins = this.threads[i].code[this.threads[i].pc];
+    return ins.k === "spin" && (this.mem[ins.v] || 0) < ins.seuil;
   };
 
   /** Plus personne ne peut avancer, et tout le monde n'a pas fini : interblocage. */
@@ -82,10 +118,39 @@ window.CI = window.CI || {};
     }, this);
   };
 
+  /**
+   * Blocage de fait : plus aucun fil ne peut progresser, meme si l'un d'eux
+   * continue de consommer du processeur. Un fil qui tourne a vide n'est pas
+   * "bloque" au sens de l'ordonnanceur — mais il n'avancera jamais, et il
+   * garde son verrou. C'est la situation du semaphore naif.
+   */
+  ThreadSim.prototype.bloqueDeFait = function () {
+    if (this.allDone()) return false;
+    var vide = false;
+    var fige = this.threads.every(function (_, i) {
+      if (this.finished(i) || this.isBlocked(i)) return true;
+      if (this.tourneAVide(i)) { vide = true; return true; }
+      return false;
+    }, this);
+    return fige && vide;
+  };
+
   /** Fait avancer le fil i d'une instruction. Rend false s'il ne peut pas. */
   ThreadSim.prototype.step = function (i) {
     if (this.finished(i) || this.isBlocked(i)) return false;
-    var t = this.threads[i], ins = t.code[t.pc];
+    var t = this.threads[i];
+
+    /* Reveille par un notify : le pas suivant sert a reprendre le verrou,
+       pas a executer une instruction. */
+    if (t.reprend) {
+      this.locks[this.verrouDe(i)] = i;
+      t.reprend = false;
+      this.history.push(i);
+      this.render();
+      return true;
+    }
+
+    var ins = t.code[t.pc];
 
     switch (ins.k) {
       case "incr":   this.mem[ins.v] = (this.mem[ins.v] || 0) + 1; break;
@@ -94,6 +159,50 @@ window.CI = window.CI || {};
       case "store":  this.mem[ins.v] = t.regs[ins.r]; break;
       case "lock":   this.locks[ins.l] = i; break;
       case "unlock": if (this.locks[ins.l] === i) this.locks[ins.l] = null; break;
+
+      case "spin":
+        /* Attente active : la condition n'est pas remplie, donc on ne bouge
+           pas — et surtout on garde le verrou. C'est tout le drame. */
+        if ((this.mem[ins.v] || 0) < ins.seuil) {
+          t.tours++;
+          this.history.push(i);
+          this.render();
+          return true;
+        }
+        break;
+
+      case "wait":
+        if (this.locks[ins.l] === i) this.locks[ins.l] = null;
+        t.dort = true;
+        break;
+
+      case "notify":
+        var dormeurs = [];
+        this.threads.forEach(function (autre, j) { if (autre.dort) dormeurs.push(j); });
+        if (ins.tous) {
+          dormeurs.forEach(function (j) {
+            this.threads[j].dort = false;
+            this.threads[j].reprend = true;
+          }, this);
+        } else if (dormeurs.length) {
+          var choisi = dormeurs[0];
+          this.threads[choisi].dort = false;
+          this.threads[choisi].reprend = true;
+        }
+        break;
+
+      case "cas":
+        /* Reussite seulement si la case vaut encore ce qu'on avait lu. */
+        if (this.mem[ins.v] === t.regs[ins.r]) {
+          this.mem[ins.v] = t.regs[ins.r] + 1;
+        } else {
+          t.pc = ins.echec;
+          this.history.push(i);
+          this.render();
+          return true;
+        }
+        break;
+
       default: break;
     }
     t.pc++;
@@ -105,7 +214,7 @@ window.CI = window.CI || {};
   /** Ordonnancement aleatoire jusqu'au bout (ou jusqu'a l'interblocage). */
   ThreadSim.prototype.runRandom = function () {
     var garde = 0;
-    while (!this.allDone() && !this.deadlocked() && garde++ < 10000) {
+    while (!this.allDone() && !this.deadlocked() && !this.bloqueDeFait() && garde++ < 10000) {
       var libres = [];
       this.threads.forEach(function (_, i) {
         if (!this.finished(i) && !this.isBlocked(i)) libres.push(i);
@@ -122,12 +231,17 @@ window.CI = window.CI || {};
     var grid = CI.h("div", { "class": "simgrid" });
     this.threads.forEach(function (t, i) {
       var bloque = self.isBlocked(i), fini = self.finished(i);
+      var dort = t.dort, reprend = t.reprend, vide = self.tourneAVide(i);
 
       var head = CI.h("div", { "class": "th-head" }, [
         CI.h("span", { "class": "th-name", text: t.name }),
         CI.h("span", {
-          "class": "th-state" + (bloque ? " blocked" : (fini ? " done" : "")),
-          text: bloque ? "bloqué" : (fini ? "terminé" : "prêt")
+          "class": "th-state" + (bloque || vide ? " blocked" : (fini ? " done" : "")),
+          text: dort ? "endormi"
+              : reprend ? "réveillé, reprend le verrou"
+              : vide ? "tourne à vide (" + t.tours + ")"
+              : bloque ? "bloqué"
+              : fini ? "terminé" : "prêt"
         })
       ]);
 
@@ -144,7 +258,10 @@ window.CI = window.CI || {};
 
       var btn = CI.h("button", {
         "class": (!fini && !bloque) ? "primary" : "",
-        text: fini ? "terminé" : (bloque ? "bloqué" : "avancer " + t.name)
+        text: fini ? "terminé"
+            : dort ? "endormi"
+            : bloque ? "bloqué"
+            : "avancer " + t.name
       });
       btn.disabled = fini || bloque;
       btn.onclick = function () { self.step(i); self.onChange(self); };

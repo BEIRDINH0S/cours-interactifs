@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Attendre son tour</title>
+<meta name="description" content="Semaphores, moniteurs, wait et notify : comment un fil attend sans empecher les autres d avancer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap">
+
+
+  <header class="lesson-head">
+    <h1 id="lesson-title"></h1>
+    <p class="sub" id="lesson-sub"></p>
+  </header>
+
+  <div class="rail" id="rail"></div>
+
+  <div class="stage">
+    <div class="stage-fig">
+      <div class="zone">à manipuler</div>
+      <div id="host"></div>
+      <div class="tools" id="tools"></div>
+      <div id="readout-zone" hidden>
+        <div class="zone">ce que ça donne</div>
+        <div class="readout" id="readout"></div>
+      </div>
+    </div>
+    <div class="stage-txt">
+      <p class="eyebrow" id="st-chap"></p>
+      <h2 id="st-title"></h2>
+      <div id="st-say"></div>
+      <div class="goal" id="st-goal" hidden><span class="mark">objectif</span><span id="st-goal-text"></span></div>
+      <div class="fb" id="st-fb"></div>
+    </div>
+  </div>
+
+  <div class="lesson-foot">
+    <button id="back">◀ Retour</button>
+    <button id="cont" class="primary">Continuer ▶</button>
+    <span class="note" id="foot-note"></span>
+  </div>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script src="../../modules.js"></script>
+<script src="../../assets/js/lib/progres.js"></script>
+<script src="../../assets/js/lib/chrome.js"></script>
+<script src="../../assets/js/lib/threads.js"></script>
+<script src="../../assets/js/lib/lesson.js"></script>
+<script src="js/lecon-moniteurs.js"></script>
+</body>
+</html>
