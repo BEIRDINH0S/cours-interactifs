@@ -1,0 +1,42 @@
+# Deploiement du site sur GitHub Pages.
+#
+# On n'utilise pas le constructeur Pages historique (build_type "legacy") :
+# sa file d'attente s'est bloquee, et il ne laisse aucune prise. Ce workflow
+# fait la meme chose — publier le depot tel quel, sans build — mais sur un
+# runner ordinaire, et ses journaux sont consultables.
+
+name: Deployer sur Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule publication a la fois ; on ne coupe pas celle qui est en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deployer:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      # Le site n'a pas d'etape de construction : on televerse le depot tel quel.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deploiement
+        uses: actions/deploy-pages@v4
