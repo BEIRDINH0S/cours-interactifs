@@ -220,5 +220,90 @@ window.CI_CARTES = [
       { t: "Elle est valide tant qu'on lit tout de suite", ok: false, why: "Non — c'est précisément " +
         "le genre de bug qui marche en test et casse en production." }
     ]
+  },
+
+  /* ---------------------------------------------------------- Java : les pieges du TP */
+  {
+    type: "code", tag: "lambdas",
+    q: "Dans une boucle qui lance N tâches, laquelle compile et donne le bon découpage ?",
+    opts: [
+      { ok: true,
+        code: "for (int i = 0; i < N; i++) {\n    final int k = i;\n    pool.submit(() ->\n        compter(tab, k*pas, (k+1)*pas));\n}",
+        why: "Correct. Une lambda ne capture qu'une variable <strong>effectivement finale</strong> : " +
+             "on recopie l'indice dans une variable locale au tour de boucle." },
+      { ok: false,
+        code: "for (int i = 0; i < N; i++) {\n    pool.submit(() ->\n        compter(tab, i*pas, (i+1)*pas));\n}",
+        why: "Refusé à la compilation : <code>i</code> change à chaque tour, donc n'est pas " +
+             "effectivement finale. C'est le même piège qu'en C, où passer <code>&amp;i</code> à " +
+             "pthread_create fait lire aux threads un indice déjà incrémenté — sauf qu'ici le " +
+             "compilateur t'arrête." }
+    ]
+  },
+  {
+    type: "qcm", tag: "atomiques",
+    q: "Pourquoi un <code>AtomicReference&lt;Integer&gt;</code> est-il nettement plus lent qu'un " +
+       "<code>AtomicInteger</code> pour compter ?",
+    opts: [
+      { t: "Parce que chaque nouvelle valeur alloue un objet Integer", ok: true,
+        why: "Oui. La référence pointe vers un objet : à chaque incrément réussi il faut en créer " +
+             "un nouveau, que le ramasse-miettes devra ensuite collecter. L'AtomicInteger, lui, " +
+             "manipule un entier en place." },
+      { t: "Parce qu'il pose un verrou interne", ok: false,
+        why: "Non : les deux reposent sur la même instruction matérielle de compare-and-set, sans verrou." },
+      { t: "Parce que compareAndSet y échoue plus souvent", ok: false,
+        why: "Non, le taux d'échec dépend de la contention, pas du type." }
+    ]
+  },
+  {
+    type: "code", tag: "sémaphore",
+    q: "Laquelle de ces deux écritures d'<code>acquire</code> ne laisse jamais le compteur passer " +
+       "sous zéro, même un instant ?",
+    opts: [
+      { ok: true,
+        code: "int v = val.get();\nwhile (v < 1 ||\n       !val.compareAndSet(v, v - 1)) {\n    v = val.get();\n}",
+        why: "Correct. Le test <code>v &lt; 1</code> garde le CAS : on ne décrémente que si on en a " +
+             "le droit. La valeur publiée reste toujours positive ou nulle." },
+      { ok: false,
+        code: "while (true) {\n    if (val.decrementAndGet() >= 0) break;\n    val.incrementAndGet();\n}",
+        why: "Elle finit juste, mais elle décrémente d'abord et répare ensuite : entre les deux, " +
+             "<code>val</code> vaut −1 et un autre fil peut l'observer ainsi. Correcte au final, " +
+             "fausse en chemin." }
+    ]
+  },
+  {
+    type: "qcm", tag: "parallélisation",
+    q: "Pourquoi un <code>ExecutorService</code> donne-t-il une meilleure accélération que de créer " +
+       "N threads à chaque appel ?",
+    opts: [
+      { t: "Parce que le pool réutilise ses threads au lieu d'en créer de nouveaux", ok: true,
+        why: "Oui. Le coût de création est payé une fois, à la construction du pool, et non à " +
+             "chaque découpage. C'est ce qui fait reculer le plafond d'accélération." },
+      { t: "Parce qu'il répartit mieux le travail entre les cœurs", ok: false,
+        why: "Non : avec des tranches de taille égale, la répartition est la même." },
+      { t: "Parce que les Future évitent les joins", ok: false,
+        why: "Non : <code>Future.get()</code> bloque exactement comme un join. Ce qu'il apporte, " +
+             "c'est de rendre une valeur plutôt que d'écrire dans un tableau partagé." }
+    ]
+  },
+  {
+    type: "trous", tag: "parallélisation",
+    q: "Complète le découpage en N tranches, en veillant à ne pas déborder du tableau.",
+    code: [
+      "int pas = (int) Math.ceil((double) n / N);",
+      "",
+      "for (int i = 0; i < N; i++) {",
+      "    final int k = {0};",
+      "    futures.add(pool.submit(() ->",
+      "        compter(tab, k * pas,",
+      "                Math.{1}(n, (k + 1) * pas))));",
+      "}"
+    ],
+    trous: [
+      { sol: "i", opts: ["i", "N", "pas"] },
+      { sol: "min", opts: ["min", "max"] }
+    ],
+    why: "La dernière tranche déborderait sans le <code>min</code> : avec un arrondi au-dessus, " +
+         "<code>N * pas</code> dépasse <code>n</code>."
   }
+
 ];

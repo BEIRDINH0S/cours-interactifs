@@ -362,6 +362,52 @@
 
     {
       chap: "Attendre",
+      titre: "Deux façons d'écrire acquire, une seule garde l'invariant",
+      say: "<p class='say'>Un sémaphore ne doit jamais descendre sous zéro. Avec un entier " +
+           "atomique, deux écritures sont possibles.</p>" +
+           "<p class='say'>Celle-ci décrémente d'abord, et <strong>répare</strong> si c'est passé " +
+           "en négatif. Elle marche — mais regarde la valeur pendant la réparation.</p>",
+      goal: "Fais passer <code>val</code> sous zéro.",
+      mount: function (api) {
+        /* decrementAndGet, puis incrementAndGet si on est passe sous zero */
+        var acquerirRepare = function () {
+          return [
+            { k: "decr", v: "val" },
+            { k: "sinegatif", v: "val", vers: 2 },
+            { k: "saut", vers: 4 },
+            { k: "incr", v: "val" },
+            { k: "note", txt: "jeton obtenu" }
+          ];
+        };
+        var s = sim(api, {
+          threads: [
+            { name: "Thread 1", code: acquerirRepare() },
+            { name: "Thread 2", code: acquerirRepare() }
+          ],
+          mem: { val: 1 }
+        });
+        var vuNegatif = false;
+        s.onChange = function (st) {
+          if (st.mem.val < 0) vuNegatif = true;
+          api.tools(rejouer(st));
+          api.readout([{ t: "val", v: st.mem.val, cls: st.mem.val < 0 ? "bad" : "" }]);
+          if (vuNegatif) {
+            api.fb("<strong>val est passé à −1.</strong> L'invariant « jamais négatif » est violé " +
+                   "pendant deux instructions — et un autre fil peut l'observer dans cet état. " +
+                   "L'autre écriture, un <code>compareAndSet</code> gardé par un test " +
+                   "<code>val &gt; 0</code>, ne décrémente que si elle peut : la valeur n'est " +
+                   "jamais négative, pas même un instant.", "ok");
+            api.solve();
+          } else {
+            api.fb("Fais décrémenter les deux fils avant que l'un ne répare.");
+          }
+        };
+        s.onChange(s);
+      }
+    },
+
+    {
+      chap: "Attendre",
       titre: "Ce qui n'a pas besoin d'être synchronized",
       say: "<p class='say'>Dans le sémaphore, <code>getInit()</code> rend une valeur fixée une " +
            "fois pour toutes dans le constructeur.</p>",
@@ -528,6 +574,9 @@
            "<p class='say'>On teste la condition dans un <code>while</code>, jamais un " +
            "<code>if</code> : un fil réveillé doit la revérifier. Et on réveille avec " +
            "<code>notifyAll()</code> : un signal donné à un seul fil peut se perdre.</p>" +
+           "<p class='say'>Et une implémentation peut être <em>correcte au final</em> tout en " +
+           "violant son invariant en chemin : décrémenter puis réparer laisse la valeur passer " +
+           "sous zéro, là où un CAS gardé ne l'y laisse jamais aller.</p>" +
            "<p class='say'>Découper une boucle ne gagne que jusqu'à un point : au-delà, créer les " +
            "fils coûte plus que le partage ne rapporte.</p>",
       goal: null,

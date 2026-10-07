@@ -53,7 +53,7 @@ window.CI_MODULES = [
     resume: "Deux fils d'exécution, une seule mémoire. Ce qui se passe quand on ne décide pas de " +
             "l'ordre, et comment reprendre la main dessus.",
     href: "modules/concurrence/index.html",
-    tags: ["2 leçons", "18 cartes"],
+    tags: ["2 leçons", "23 cartes"],
     aVenir: ["Un verrou ou mille", "Les files de tâches"],
     pages: [
       {
@@ -74,7 +74,7 @@ window.CI_MODULES = [
         titre: "Réviser",
         type: "revision",
         href: "modules/concurrence/revision.html",
-        resume: "18 cartes, en répétition espacée.",
+        resume: "23 cartes, en répétition espacée.",
         statut: "vivant"
       }
     ]

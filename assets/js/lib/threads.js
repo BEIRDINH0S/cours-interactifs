@@ -16,6 +16,10 @@
                                      le verrou, tant que mem[v] < seuil
      {k:"wait",   l:"A"}             lache le verrou et s'endort
      {k:"notify", l:"A", tous:true}  reveille un dormeur, ou tous
+     {k:"decr",   v:"val"}           val-- en une seule etape atomique
+     {k:"sinegatif", v:"val", vers:2}
+                                     saute si la case est passee sous zero
+     {k:"saut",   vers:0}            saut inconditionnel (une reprise de boucle)
      {k:"cas",    v:"c", r:"r", echec:3}
                                      compare-and-set : si mem[v] vaut le
                                      registre, ecrit r+1 ; sinon saute a
@@ -38,6 +42,9 @@ window.CI = window.CI || {};
   function label(ins) {
     switch (ins.k) {
       case "incr":   return ins.v + "++";
+      case "decr":   return ins.v + "--";
+      case "sinegatif": return "si (" + ins.v + " < 0)";
+      case "saut":   return "recommencer";
       case "load":   return ins.r + " ← " + ins.v;
       case "add":    return ins.r + " ← " + ins.r + " + 1";
       case "store":  return ins.v + " ← " + ins.r;
@@ -154,6 +161,22 @@ window.CI = window.CI || {};
 
     switch (ins.k) {
       case "incr":   this.mem[ins.v] = (this.mem[ins.v] || 0) + 1; break;
+      case "decr":   this.mem[ins.v] = (this.mem[ins.v] || 0) - 1; break;
+
+      case "sinegatif":
+        if ((this.mem[ins.v] || 0) < 0) {
+          t.pc = ins.vers;
+          this.history.push(i);
+          this.render();
+          return true;
+        }
+        break;
+
+      case "saut":
+        t.pc = ins.vers;
+        this.history.push(i);
+        this.render();
+        return true;
       case "load":   t.regs[ins.r] = this.mem[ins.v]; break;
       case "add":    t.regs[ins.r] = (t.regs[ins.r] || 0) + 1; break;
       case "store":  this.mem[ins.v] = t.regs[ins.r]; break;

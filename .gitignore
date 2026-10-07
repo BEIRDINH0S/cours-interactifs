@@ -1,2 +1,6 @@
 .DS_Store
 *.swp
+
+# corriges et sujets du cours : ils ne sont pas a moi, et ce depot est public
+*_corrige.tar
+*_sujet.tar
