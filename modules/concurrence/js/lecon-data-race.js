@@ -65,6 +65,7 @@
 
     /* 1 ------------------------------------------------------------------ */
     {
+      chap: "La course",
       titre: "Deux fils, un compteur",
       say: "<p class='say'>Deux fils d'exécution veulent ajouter 1 au même compteur. " +
            "<strong>Toi</strong> tu décides lequel avance, un pas à la fois.</p>" +
@@ -96,6 +97,7 @@
 
     /* 2 ------------------------------------------------------------------ */
     {
+      chap: "La course",
       titre: "c++ n'existe pas",
       say: "<p class='say'>Le processeur ne sait pas incrémenter une case mémoire d'un bloc. Il " +
            "<strong>lit</strong>, il <strong>ajoute</strong> dans un registre, il " +
@@ -132,6 +134,7 @@
 
     /* 3 ------------------------------------------------------------------ */
     {
+      chap: "La course",
       titre: "Ça porte un nom",
       say: "<p class='say'>Une <strong>data race</strong> : deux fils accèdent à la même case " +
            "mémoire sans synchronisation, et <strong>au moins un des deux écrit</strong>.</p>" +
@@ -165,6 +168,7 @@
 
     /* 4 ------------------------------------------------------------------ */
     {
+      chap: "La course",
       titre: "Quand les incréments se multiplient",
       say: "<p class='say'>Deux fils, <strong>N incréments chacun</strong>, ordre laissé au hasard. " +
            "Le résultat devrait valoir 2N.</p>" +
@@ -220,6 +224,7 @@
 
     /* 5 ------------------------------------------------------------------ */
     {
+      chap: "La course",
       titre: "Jusqu'où ça peut tomber",
       say: "<p class='say'>Deux fils, N incréments chacun, N au moins égal à 2. Sans " +
            "synchronisation, quelle est la <strong>plus petite valeur</strong> que c puisse " +
@@ -257,6 +262,7 @@
 
     /* 6 ------------------------------------------------------------------ */
     {
+      chap: "Le verrou",
       titre: "Le verrou",
       say: "<p class='say'>Un <strong>mutex</strong> : un seul fil peut le détenir. Celui qui " +
            "appelle <code>lock</code> alors qu'il est pris <strong>attend</strong>.</p>" +
@@ -297,6 +303,7 @@
 
     /* 7 ------------------------------------------------------------------ */
     {
+      chap: "Le verrou",
       titre: "Le verrou ne protège rien tout seul",
       say: "<p class='say'>Rien, dans la machine, ne relie un verrou à une donnée. " +
            "« <code>A</code> protège <code>c</code> » n'existe que dans la tête de celui qui " +
@@ -335,6 +342,7 @@
 
     /* 8 ------------------------------------------------------------------ */
     {
+      chap: "L'interblocage",
       titre: "Deux verrous, et plus personne n'avance",
       say: "<p class='say'>Deux comptes à virer l'un vers l'autre, un verrou par compte. Chaque fil " +
            "prend d'abord le sien, puis celui de l'autre.</p>" +
@@ -379,6 +387,7 @@
 
     /* 9 ------------------------------------------------------------------ */
     {
+      chap: "L'interblocage",
       titre: "Le rang des verrous",
       say: "<p class='say'>La parade tient en une règle : donner un <strong>rang</strong> à chaque " +
            "verrou, et toujours les acquérir dans l'ordre croissant. Ici A avant B, pour tout le " +
@@ -430,6 +439,7 @@
 
     /* 10 ----------------------------------------------------------------- */
     {
+      chap: "Bilan",
       titre: "Ce que tu sais maintenant",
       say: "<p class='say'>Une <strong>data race</strong> : deux accès concurrents à la même case, " +
            "dont au moins une écriture. <code>c++</code> en contient une, parce que ce sont trois " +
@@ -457,5 +467,11 @@
 
   /* ------------------------------------------------ demarrage */
 
-  CI.Lesson({ steps: STEPS, key: "lecon-data-race-progres" });
+  CI.Lesson({
+    steps: STEPS,
+    key: "lecon-data-race-progres",
+    titre: "Data race et exclusion mutuelle",
+    sousTitre: "Deux fils, une seule mémoire, et toi à la place de l'ordonnanceur : ce qui casse " +
+               "quand personne ne décide de l'ordre, et comment reprendre la main."
+  });
 })(window.CI);

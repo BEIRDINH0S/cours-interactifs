@@ -77,6 +77,7 @@
 
     /* 1 ------------------------------------------------------------------ */
     {
+      chap: "Le problème",
       titre: "Coupe le graphe en deux",
       say: "<p class='say'>Voici six points reliés par sept liens. Clique sur un point pour " +
            "l'envoyer de l'autre côté.</p>" +
@@ -117,6 +118,7 @@
 
     /* 2 ------------------------------------------------------------------ */
     {
+      chap: "Le problème",
       titre: "Deux mots, et c'est tout",
       say: "<p class='say'>Une <strong>coupe</strong>, c'est exactement ce que tu viens de faire : " +
            "répartir les points en deux groupes, aucun vide.</p>" +
@@ -149,6 +151,7 @@
 
     /* 3 ------------------------------------------------------------------ */
     {
+      chap: "Le problème",
       titre: "Pourquoi on ne peut pas toutes les essayer",
       say: "<p class='say'>Sur six points, tu peux tester les séparations à la main. Au-delà, le " +
            "nombre de coupes possibles vaut <strong>2<sup>n−1</sup> − 1</strong>.</p>" +
@@ -195,6 +198,7 @@
 
     /* 4 ------------------------------------------------------------------ */
     {
+      chap: "L'algorithme",
       titre: "L'idée : coller deux points ensemble",
       say: "<p class='say'>Clique sur un <strong>lien</strong> : ses deux extrémités fusionnent en " +
            "un seul point. On appelle ça <strong>contracter</strong>.</p>" +
@@ -235,6 +239,7 @@
 
     /* 5 ------------------------------------------------------------------ */
     {
+      chap: "L'algorithme",
       titre: "Les liens en double comptent",
       say: "<p class='say'>Les deux points de gauche viennent d'être collés. Regarde ce qui relie " +
            "ce groupe au point voisin.</p>",
@@ -276,6 +281,7 @@
 
     /* 6 ------------------------------------------------------------------ */
     {
+      chap: "L'algorithme",
       titre: "L'algorithme tient en une phrase",
       say: "<p class='say'><strong>Tire un lien au hasard, contracte-le, recommence jusqu'à ce qu'il " +
            "ne reste que deux groupes.</strong></p>" +
@@ -332,6 +338,7 @@
 
     /* 7 ------------------------------------------------------------------ */
     {
+      chap: "La preuve",
       titre: "Un point tout seul, c'est déjà une coupe",
       say: "<p class='say'>Clique sur un point pour l'isoler du reste.</p>" +
            "<p class='say'>La valeur que tu lis est son nombre de liens — son <strong>degré</strong>. " +
@@ -377,6 +384,7 @@
 
     /* 8 ------------------------------------------------------------------ */
     {
+      chap: "La preuve",
       titre: "La chance de ne pas se tromper",
       say: "<p class='say'>L'algorithme réussit s'il ne contracte <em>jamais</em> un lien de la coupe " +
            "minimum. À chaque étape, la probabilité d'en toucher un est au plus " +
@@ -441,6 +449,7 @@
 
     /* 9 ------------------------------------------------------------------ */
     {
+      chap: "La preuve",
       titre: "Une chance faible reste une chance",
       say: "<p class='say'>Sur six points, l'algorithme réussit une fois sur quinze. C'est peu — " +
            "mais c'est une probabilité qui ne dépend que de n, jamais de la forme du graphe.</p>" +
@@ -472,6 +481,7 @@
 
     /* 10 ----------------------------------------------------------------- */
     {
+      chap: "Bilan",
       titre: "Ce que tu sais maintenant",
       say: "<p class='say'>Une <strong>coupe</strong> sépare les points en deux groupes ; sa valeur " +
            "compte les liens qui traversent.</p>" +
@@ -503,6 +513,9 @@
   CI.Lesson({
     steps: STEPS,
     key: "lecon-mincut-progres",
+    titre: "Coupe minimum",
+    sousTitre: "Séparer un graphe en deux au moindre coût — et pourquoi un algorithme qui tire au " +
+               "hasard y arrive mieux que l'énumération.",
     graph: { names: NAME, pos: G.pos, edges: EDGES }
   });
 })(window.CI);

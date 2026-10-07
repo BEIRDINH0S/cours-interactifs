@@ -2,6 +2,8 @@
    lesson.js — le lecteur de lecon, commun a tous les sujets.
 
    Une lecon est un tableau d'etapes. Chaque etape declare :
+     chap    le chapitre auquel l'etape appartient (les etapes consecutives
+             partageant le meme chapitre sont groupees dans le rail)
      titre   le titre affiche
      say     deux ou trois phrases, en HTML
      goal    l'objectif a valider (ou null : l'etape se traverse librement)
@@ -17,8 +19,12 @@
      fb(html, kind) retour immediat, kind = "ok" | "ko" | undefined
      solve()        objectif atteint : debloque « Continuer »
 
-   La page doit fournir les identifiants : rail, fig, host, tools, readout,
-   st-title, st-say, st-goal, st-goal-text, st-fb, back, cont, foot-note.
+   La lecon elle-meme declare un titre et un sous-titre, affiches en haut
+   de page : on doit toujours savoir dans quelle lecon on se trouve.
+
+   La page doit fournir les identifiants : lesson-title, lesson-sub, rail,
+   fig, host, tools, readout, readout-zone, st-chap, st-title, st-say,
+   st-goal, st-goal-text, st-fb, back, cont, foot-note.
    ========================================================================= */
 window.CI = window.CI || {};
 
@@ -30,6 +36,9 @@ window.CI = window.CI || {};
     var KEY = opts.key;
     var fig = opts.graph ? new CI.GraphFig(CI.el("fig"), opts.graph) : null;
     var cur = 0, furthest = 0;
+
+    if (opts.titre) CI.el("lesson-title").textContent = opts.titre;
+    if (opts.sousTitre) CI.el("lesson-sub").textContent = opts.sousTitre;
 
     CI.__lastFig = fig;   // point d'accroche pour les tests automatises
 
@@ -53,6 +62,7 @@ window.CI = window.CI || {};
 
       readout: function (items, before) {
         var box = CI.clear(CI.el("readout"));
+        CI.el("readout-zone").hidden = false;
         if (before) box.appendChild(before);
         (items || []).forEach(function (it) {
           box.appendChild(CI.h("div", {}, [
@@ -66,7 +76,10 @@ window.CI = window.CI || {};
         });
       },
 
-      readoutNode: function (node) { CI.clear(CI.el("readout")).appendChild(node); },
+      readoutNode: function (node) {
+        CI.el("readout-zone").hidden = false;
+        CI.clear(CI.el("readout")).appendChild(node);
+      },
 
       figHidden: function (yes) { if (CI.el("fig")) CI.el("fig").hidden = !!yes; },
 
@@ -83,15 +96,35 @@ window.CI = window.CI || {};
       }
     };
 
+    /** Regroupe les etapes consecutives qui partagent le meme chapitre. */
+    function chapitres() {
+      var out = [];
+      steps.forEach(function (s, i) {
+        var nom = s.chap || "";
+        var dernier = out[out.length - 1];
+        if (!dernier || dernier.nom !== nom) out.push({ nom: nom, indices: [i] });
+        else dernier.indices.push(i);
+      });
+      return out;
+    }
+
     function rail() {
       var box = CI.clear(CI.el("rail"));
-      steps.forEach(function (_, i) {
-        var b = CI.h("button", {
-          "class": "dot" + (i === cur ? " cur" : (i <= furthest ? " seen" : "")),
-          "aria-label": "étape " + (i + 1)
+      chapitres().forEach(function (ch) {
+        var dots = CI.h("div", { "class": "dots" });
+        ch.indices.forEach(function (i) {
+          var b = CI.h("button", {
+            "class": "dot" + (i === cur ? " cur" : (i <= furthest ? " seen" : "")),
+            "aria-label": "étape " + (i + 1) + (ch.nom ? " — " + ch.nom : "")
+          });
+          if (i <= furthest) b.onclick = function () { show(i); };
+          dots.appendChild(b);
         });
-        if (i <= furthest) b.onclick = function () { show(i); };
-        box.appendChild(b);
+        var actif = ch.indices.indexOf(cur) >= 0;
+        box.appendChild(CI.h("div", { "class": "chap" + (actif ? " cur" : "") }, [
+          CI.h("span", { "class": "chap-name", text: ch.nom }),
+          dots
+        ]));
       });
       box.appendChild(CI.h("span", { "class": "count", text: (cur + 1) + " / " + steps.length }));
     }
@@ -106,6 +139,8 @@ window.CI = window.CI || {};
       CI.clear(CI.el("host"));
       CI.clear(CI.el("tools"));
       CI.clear(CI.el("readout"));
+      CI.el("readout-zone").hidden = true;
+      CI.el("st-chap").textContent = (s.chap ? s.chap + " · " : "") + "étape " + (i + 1);
       CI.el("st-title").textContent = s.titre;
       CI.el("st-say").innerHTML = s.say;
       api.fb("");

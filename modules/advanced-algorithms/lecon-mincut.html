@@ -15,16 +15,26 @@
 
   <div class="site-top" id="crumb"></div>
 
+  <header class="lesson-head">
+    <h1 id="lesson-title"></h1>
+    <p class="sub" id="lesson-sub"></p>
+  </header>
+
   <div class="rail" id="rail"></div>
 
   <div class="stage">
     <div class="stage-fig">
+      <div class="zone">à manipuler</div>
       <svg class="fig" id="fig" viewBox="0 0 520 250" role="img" aria-label="Figure de l'étape"></svg>
       <div id="host"></div>
       <div class="tools" id="tools"></div>
-      <div class="readout" id="readout"></div>
+      <div id="readout-zone" hidden>
+        <div class="zone">ce que ça donne</div>
+        <div class="readout" id="readout"></div>
+      </div>
     </div>
     <div class="stage-txt">
+      <p class="eyebrow" id="st-chap"></p>
       <h2 id="st-title"></h2>
       <div id="st-say"></div>
       <div class="goal" id="st-goal" hidden><span class="mark">objectif</span><span id="st-goal-text"></span></div>
