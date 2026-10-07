@@ -38,7 +38,9 @@ assets/
   js/hub.js                rendu de l'accueil
   js/lib/
     core.js                helpers DOM et SVG, enveloppe convexe, Fisher-Yates
+    chrome.js              la navigation : barre haute, selecteur de sujet, theme, badges
     lesson.js              le lecteur de lecon : rail, objectifs bloquants, progression
+    cards.js               revision par cartes et planification par boites
     graph.js               figure de graphe reutilisable (clic sommet / clic arete)
     threads.js             simulateur d'entrelacement : fils, memoire partagee, verrous
     stepper.js             controleur pas a pas (boutons, curseur, clavier, deroule auto)
@@ -48,21 +50,36 @@ modules/
     index.html             la page du sujet : ses lecons et ses ateliers
     lecon-mincut.html      la lecon « coupe minimum », 10 etapes
     karger.html            l'atelier : l'algorithme vu depuis son implementation en C
-    js/                    une lecon = un fichier
+    revision.html          16 cartes, en repetition espacee
+    js/                    une lecon = un fichier ; cartes.js porte le paquet
     data/implementation-c.js   le code C affiche dans l'atelier
   concurrence/             « Memoire partagee »
     index.html             la page du sujet
     lecon-data-race.html   la lecon « data race et exclusion mutuelle », 10 etapes
-    js/lecon-data-race.js
+    revision.html          18 cartes, en repetition espacee
+    js/lecon-data-race.js, js/cartes.js
   architectures-processeurs/   « Hierarchie memoire », squelette servant de patron
 ```
+
+## La navigation
+
+`chrome.js` s'insere en tete de chaque page et ne demande aucune configuration :
+le sujet et la page courante se deduisent de l'URL, les pages d'un sujet sont lues
+dans `modules.js`. **Consequence : une page absente de `modules.js` n'apparait nulle
+part dans la navigation**, meme si le fichier existe.
+
+La barre du sujet affiche l'avancement : `4/10` pour une lecon entamee, le nombre de
+cartes a revoir pour un paquet. Ces compteurs viennent de `localStorage`, et la cle
+d'une lecon derive du nom de son fichier : une lecon `<nom>.html` doit employer la
+cle `<nom>-progres`.
 
 ## Ajouter un sujet
 
 1. `mkdir modules/<slug>` et y mettre un `index.html` (copier celui de
    `architectures-processeurs`, c'est le patron).
 2. Lier `../../assets/css/system.css` et les briques utiles de `assets/js/lib/`.
-3. Ajouter une entree dans `modules.js`.
+3. Ajouter une entree dans `modules.js`, avec ses pages : c'est ce qui les fait
+   apparaitre dans la navigation.
 
 Rien d'autre : pas de manifeste a regenerer, pas de build a relancer.
 
@@ -76,7 +93,8 @@ Rien d'autre : pas de manifeste a regenerer, pas de build a relancer.
   doit pouvoir suivre.
 - La progression dans une lecon est gardee en `localStorage`, avec un `try/catch` :
   en navigation privee elle repart simplement de zero.
-- `CI.__lastFig` et `CI.__lastSim` exposent la figure et le simulateur courants ;
-  ce sont des points d'accroche pour les tests automatises, pas une API.
+- `CI.__lastFig`, `CI.__lastSim` et `CI.__cardsInternals` sont des points d'accroche
+  pour les tests automatises, pas une API.
+- Chaque page charge `core.js`, puis `modules.js`, puis `chrome.js`, dans cet ordre.
 - Une lecon ne contient que ses etapes : le lecteur qui les enchaine est commun
   a tout le site (`assets/js/lib/lesson.js`).

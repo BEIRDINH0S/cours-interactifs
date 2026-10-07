@@ -10,11 +10,6 @@
   var G = CI.FIL_ROUGE;
   var NAME = G.names, EDGES = G.edges, N = NAME.length;
 
-  CI.breadcrumb(CI.el("crumb"), [
-    { label: "Sujets", href: "../../index.html" },
-    { label: "Graphes et aléatoire", href: "index.html" },
-    { label: "Coupe minimum" }
-  ]);
 
   /* ------------------------------------------------ outils communs */
 

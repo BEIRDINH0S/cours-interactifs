@@ -493,3 +493,92 @@ select.trou.wrong{ border-color:var(--no); color:var(--no); }
 .card-fb:not(:empty){ border-left:3px solid var(--line-2); padding:8px 0 8px 12px; color:var(--ink-2); }
 .card-fb.ok:not(:empty){ border-left-color:var(--ok); color:var(--ink); }
 .card-fb.ko:not(:empty){ border-left-color:var(--no); color:var(--ink); }
+
+/* =========================================================================
+   Navigation du site (chrome.js) — barre haute + barre de sujet
+   ========================================================================= */
+.nav{
+  position:sticky; top:0; z-index:20;
+  background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top, 0px);
+}
+.nav-in{
+  max-width:1240px; margin:0 auto; padding:9px 16px;
+  display:flex; align-items:center; gap:18px;
+}
+
+.brand{
+  display:inline-flex; align-items:baseline; gap:7px; text-decoration:none; color:var(--ink);
+  font-weight:600; font-size:14.5px; letter-spacing:-.01em; white-space:nowrap;
+}
+.brand .mark{ color:var(--accent); font-size:11px; }
+.brand:hover{ color:var(--accent); }
+
+.nav-links{ display:flex; align-items:center; gap:6px; min-width:0; }
+.nav-links > a{
+  text-decoration:none; color:var(--ink-2); font-size:13.5px;
+  padding:5px 9px; border-radius:7px; white-space:nowrap;
+}
+.nav-links > a:hover{ color:var(--accent); background:var(--panel-2); }
+.nav-links > a.cur{ color:var(--ink); background:var(--panel-2); }
+
+/* selecteur de sujet : un <details>, sans script d'ouverture */
+.switch{ position:relative; }
+.switch summary{
+  list-style:none; cursor:pointer; font-size:13.5px; color:var(--ink);
+  padding:5px 10px; border:1px solid var(--line-2); border-radius:7px;
+  background:var(--panel); white-space:nowrap; max-width:46vw; overflow:hidden; text-overflow:ellipsis;
+}
+.switch summary::-webkit-details-marker{ display:none; }
+.switch summary::after{ content:" ▾"; color:var(--ink-3); }
+.switch summary:hover{ border-color:var(--accent); color:var(--accent); }
+.switch[open] summary{ border-color:var(--accent); }
+.switch .menu{
+  position:absolute; top:calc(100% + 6px); left:0; z-index:30;
+  min-width:260px; background:var(--panel); border:1px solid var(--line);
+  border-radius:10px; box-shadow:var(--shadow); overflow:hidden;
+}
+.switch .menu a{
+  display:flex; flex-direction:column; gap:1px; padding:9px 13px;
+  text-decoration:none; color:var(--ink); border-bottom:1px solid var(--line);
+}
+.switch .menu a:last-child{ border-bottom:0; }
+.switch .menu a:hover{ background:var(--panel-2); }
+.switch .menu a.cur{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+.switch .menu a.muted{ opacity:.6; }
+.switch .menu .t{ font-size:14px; font-weight:500; }
+.switch .menu .k{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+
+.theme{
+  margin-left:auto; flex:0 0 auto; width:32px; height:30px; padding:0;
+  font-size:14px; line-height:1; border-radius:7px;
+}
+
+/* barre du sujet courant */
+.subnav-in{ max-width:1240px; margin:0 auto; padding:0 16px; }
+.subnav{ display:flex; gap:2px; overflow-x:auto; }
+.subnav a{
+  display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+  text-decoration:none; color:var(--ink-2); font-size:13px;
+  padding:8px 11px; border-bottom:2px solid transparent; margin-bottom:-1px;
+}
+.subnav a:hover{ color:var(--accent); }
+.subnav a.cur{ color:var(--ink); border-bottom-color:var(--accent); font-weight:500; }
+.badge{
+  font-family:var(--mono); font-size:10.5px; font-variant-numeric:tabular-nums;
+  background:var(--accent); color:var(--panel); border-radius:999px; padding:1px 6px;
+}
+.subnav a.cur .badge{ background:var(--accent); }
+
+/* la barre remplace le fil d'Ariane : la page reprend sous elle */
+.wrap{ padding-block:26px 56px; }
+@media (max-width:620px){
+  .nav-in{ gap:10px; padding:8px 12px; }
+  .brand span:last-child{ display:none; }
+  .nav-links > a{ padding:5px 7px; font-size:13px; }
+}

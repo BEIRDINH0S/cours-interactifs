@@ -137,14 +137,4 @@ window.CI = window.CI || {};
     return (x * 100).toFixed(digits == null ? 1 : digits).replace(".", ",") + " %";
   };
 
-  /** En-tete de navigation commune a toutes les pages de module. */
-  CI.breadcrumb = function (target, items) {
-    CI.clear(target);
-    items.forEach(function (it, i) {
-      if (i) target.appendChild(CI.h("span", { "class": "sep", text: "/" }));
-      target.appendChild(it.href
-        ? CI.h("a", { href: it.href, text: it.label })
-        : CI.h("span", { text: it.label }));
-    });
-  };
 })(window.CI);

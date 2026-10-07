@@ -47,8 +47,14 @@ window.CI = window.CI || {};
       if (!isNaN(saved) && saved > 0 && saved < steps.length) { furthest = saved; cur = saved; }
     } catch (e) { /* stockage bloque : on repart de zero, sans rien casser */ }
 
+    /* La barre de navigation affiche « 4/10 » a cote d'une lecon entamee.
+       Elle derive la cle du nom du fichier : une lecon <nom>.html doit donc
+       utiliser la cle "<nom>-progres". Le total est ecrit a cote. */
     function save() {
-      try { window.localStorage.setItem(KEY, String(furthest)); } catch (e) { /* sans effet */ }
+      try {
+        window.localStorage.setItem(KEY, String(furthest));
+        window.localStorage.setItem(KEY + "-total", String(steps.length));
+      } catch (e) { /* sans effet */ }
     }
 
     var api = {
@@ -175,6 +181,7 @@ window.CI = window.CI || {};
       if (e.key === "ArrowLeft" && cur > 0) show(cur - 1);
     });
 
+    save();
     show(cur);
     return { show: show };
   };

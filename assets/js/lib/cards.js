@@ -212,6 +212,12 @@ window.CI = window.CI || {};
     var file = [], pos = 0, score = { su: 0, rate: 0 };
     var tout = false;
 
+    /* La barre de navigation affiche le nombre de cartes a revoir ; elle a
+       besoin de connaitre la taille du paquet sans le charger. */
+    try {
+      window.localStorage.setItem(cfg.key + "-total", String(cfg.cartes.length));
+    } catch (e) { /* sans effet */ }
+
     function compter() {
       var now = Date.now(), d = 0, neuves = 0;
       cfg.cartes.forEach(function (c) {

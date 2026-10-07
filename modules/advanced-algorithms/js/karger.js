@@ -12,11 +12,6 @@
   var G = CI.FIL_ROUGE;
   var NAME = G.names, EDGES = G.edges, N = NAME.length, M = EDGES.length;
 
-  CI.breadcrumb(CI.el("crumb"), [
-    { label: "Sujets", href: "../../index.html" },
-    { label: "Graphes et aléatoire", href: "index.html" },
-    { label: "Atelier" }
-  ]);
 
   /* Deux ordres choisis pour ce qu'ils montrent, plus le tirage aleatoire. */
   var PRESETS = {

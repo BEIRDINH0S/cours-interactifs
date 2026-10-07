@@ -13,7 +13,6 @@
 <body>
 <div class="wrap">
 
-  <div class="site-top" id="crumb"></div>
 
   <header class="lesson-head">
     <h1>Réviser — Mémoire partagée</h1>
@@ -37,14 +36,11 @@
 </div>
 
 <script src="../../assets/js/lib/core.js"></script>
+<script src="../../modules.js"></script>
+<script src="../../assets/js/lib/chrome.js"></script>
 <script src="../../assets/js/lib/cards.js"></script>
 <script src="js/cartes.js"></script>
 <script>
-  CI.breadcrumb(CI.el("crumb"), [
-    { label: "Sujets", href: "../../index.html" },
-    { label: "Mémoire partagée", href: "index.html" },
-    { label: "Réviser" }
-  ]);
   CI.Deck({
     key: "cartes-concurrence",
     cartes: window.CI_CARTES,

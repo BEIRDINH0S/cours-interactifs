@@ -10,11 +10,6 @@
 (function (CI) {
   "use strict";
 
-  CI.breadcrumb(CI.el("crumb"), [
-    { label: "Sujets", href: "../../index.html" },
-    { label: "Mémoire partagée", href: "index.html" },
-    { label: "Data race" }
-  ]);
 
   /* ------------------------------------------------ helpers de la lecon */
 
