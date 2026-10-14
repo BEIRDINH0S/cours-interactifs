@@ -53,6 +53,41 @@ window.CI_MODULES = [
     ]
   },
   {
+    slug: "graphes-prog-dynamique",
+    titre: "Approcher l'optimum",
+    cadre: "graphes et programmation dynamique",
+    statut: "vivant",
+    resume: "Quand calculer le meilleur est hors d'atteinte, on démontre de combien on s'en " +
+            "écarte. Deux gloutons pour répartir des tâches sur des machines, deux preuves, " +
+            "et un facteur garanti sur toute instance.",
+    href: "modules/graphes-prog-dynamique/index.html",
+    tags: ["1 atelier", "2 leçons"],
+    aVenir: ["Couverture par sommets", "Couverture par ensembles"],
+    pages: [
+      {
+        titre: "Les deux gloutons, côte à côte",
+        type: "atelier",
+        href: "modules/graphes-prog-dynamique/atelier-ordonnancement.html",
+        resume: "List scheduling et LPT déroulés sur la même instance, avec l'optimum exact.",
+        statut: "vivant"
+      },
+      {
+        titre: "La preuve du list scheduling",
+        type: "lecon",
+        href: "modules/graphes-prog-dynamique/lecon-preuve-graham.html",
+        resume: "Les deux minorants de OPT, et le retournement qui donne 2 − 1/m.",
+        statut: "vivant"
+      },
+      {
+        titre: "Trier d'abord : LPT",
+        type: "lecon",
+        href: "modules/graphes-prog-dynamique/lecon-preuve-lpt.html",
+        resume: "Un seul ingrédient en plus, et le ratio tombe à 4/3 − 1/(3m).",
+        statut: "vivant"
+      }
+    ]
+  },
+  {
     slug: "concurrence",
     titre: "Mémoire partagée",
     cadre: "programmation concurrente",

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Les deux gloutons, côte à côte</title>
+<meta name="description" content="List scheduling et LPT deroules pas a pas sur la meme instance, avec l'optimum exact et les deux minorants.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
+<link rel="stylesheet" href="../../assets/css/system.css">
+</head>
+<body>
+<div class="wrap wide">
+
+  <header class="page">
+    <p class="eyebrow">atelier · ordonnancement</p>
+    <h1>Les deux gloutons, côte à côte</h1>
+    <p class="sub">Même instance, même règle « sur la machine la moins chargée ». Un seul écart :
+    l'ordre dans lequel les tâches arrivent. Avance pas à pas et regarde où ça se joue.</p>
+  </header>
+
+  <div class="bar" style="margin-top:18px">
+    <div class="seg">
+      <button id="prev" title="Flèche gauche">◀ Précédent</button>
+      <button id="next" class="primary" title="Flèche droite ou espace">Suivant ▶</button>
+      <button id="play">Dérouler</button>
+    </div>
+    <input type="range" id="scrub" min="0" max="1" value="0" aria-label="Position dans le déroulé">
+    <span class="stepno" id="stepno">étape 0 / 0</span>
+    <span class="spacer"></span>
+    <div class="seg">
+      <span class="seg-label">machines</span>
+      <span id="mbtns"></span>
+    </div>
+  </div>
+
+  <div class="bar" style="margin-top:-6px">
+    <div class="seg">
+      <span class="seg-label">instance</span>
+      <span id="ibtns"></span>
+    </div>
+    <span class="spacer"></span>
+    <span class="read" id="durees"></span>
+  </div>
+
+  <div class="duo" id="duo">
+    <section class="card" style="margin-bottom:0">
+      <div class="card-h">List scheduling <span class="note">ordre d'arrivée, tel quel</span></div>
+      <div class="card-b">
+        <p class="duo-titre"><span id="t-ls"></span><span class="ratio" id="r-ls"></span></p>
+        <svg id="svg-ls" role="img" aria-label="Charges des machines, list scheduling"></svg>
+        <div class="file" id="file-ls" style="margin-top:10px"></div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:0">
+      <div class="card-h">LPT <span class="note">trié par durée décroissante d'abord</span></div>
+      <div class="card-b">
+        <p class="duo-titre"><span id="t-lpt"></span><span class="ratio" id="r-lpt"></span></p>
+        <svg id="svg-lpt" role="img" aria-label="Charges des machines, LPT"></svg>
+        <div class="file" id="file-lpt" style="margin-top:10px"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <div class="card-h">Ce qui se passe</div>
+    <div class="card-b">
+      <div class="counters">
+        <div><div class="t">OPT (exact)</div><div class="v" id="c-opt">—</div></div>
+        <div><div class="t">makespan LS</div><div class="v" id="c-ls">—</div></div>
+        <div><div class="t">makespan LPT</div><div class="v" id="c-lpt">—</div></div>
+        <div><div class="t">borne 2−1/m</div><div class="v" id="c-b1">—</div></div>
+        <div><div class="t">borne 4/3−1/3m</div><div class="v" id="c-b2">—</div></div>
+      </div>
+      <div class="legend">
+        <span><i style="border-top-color:var(--accent);border-top-style:dashed"></i>OPT</span>
+        <span><i style="border-top-color:var(--ok);border-top-style:dashed"></i>moyenne Σpⱼ/m</span>
+        <span><i style="border-top-color:var(--mark);border-top-style:dashed"></i>plus grande tâche</span>
+        <span><i style="border-top-color:var(--ok)"></i>machine choisie</span>
+        <span><i style="border-top-color:var(--no)"></i>machine critique</span>
+      </div>
+    </div>
+    <div class="explain">
+      <div class="phase" id="phase">état initial</div>
+      <p id="say"></p>
+    </div>
+  </section>
+
+  <footer class="page" style="margin-top:28px">
+    <p><kbd>←</kbd> <kbd>→</kbd> pour avancer, <kbd>espace</kbd> pour l'étape suivante.
+    Les deux dessins partagent la même échelle verticale : les hauteurs se comparent directement.</p>
+    <p>L'optimum est calculé <em>exactement</em>, par séparation et évaluation — ce n'est pas une
+    estimation. C'est possible seulement parce que les instances sont minuscules : le problème
+    est NP-difficile, et c'est toute la raison d'être des deux gloutons.</p>
+    <p>Les preuves des deux ratios sont déroulées pas à pas dans
+    <a href="lecon-preuve-graham.html">la leçon sur le list scheduling</a> et
+    <a href="lecon-preuve-lpt.html">celle sur LPT</a>.</p>
+  </footer>
+</div>
+
+<script src="../../assets/js/lib/core.js"></script>
+<script src="../../modules.js"></script>
+<script src="../../assets/js/lib/progres.js"></script>
+<script src="../../assets/js/lib/chrome.js"></script>
+<script src="../../assets/js/lib/stepper.js"></script>
+<script src="js/ordonnancement.js"></script>
+<script src="js/atelier.js"></script>
+</body>
+</html>

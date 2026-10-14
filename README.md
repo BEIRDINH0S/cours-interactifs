@@ -51,15 +51,24 @@ modules/
   advanced-algorithms/     « Graphes et aleatoire »
     index.html             la page du sujet : ses lecons et ses ateliers
     lecon-mincut.html      la lecon « coupe minimum », 10 etapes
+    lecon-repetition.html  la lecon « repeter pour fiabiliser », 8 etapes
     karger.html            l'atelier : l'algorithme vu depuis son implementation en C
-    revision.html          16 cartes, en repetition espacee
+    revision.html          26 cartes, en repetition espacee
     js/                    une lecon = un fichier ; cartes.js porte le paquet
     data/implementation-c.js   le code C affiche dans l'atelier
+    data/mesures-tp.js     les releves du TP1, genere par script (ne pas editer)
+  graphes-prog-dynamique/  « Approcher l'optimum »
+    index.html             la page du sujet
+    atelier-ordonnancement.html  les deux gloutons deroules cote a cote
+    lecon-preuve-graham.html     la preuve du ratio 2-1/m, 8 etapes
+    lecon-preuve-lpt.html        la preuve de LPT, 8 etapes
+    js/ordonnancement.js   le simulateur partage : gloutons, OPT exact, minorants, dessin
   concurrence/             « Memoire partagee »
     index.html             la page du sujet
     lecon-data-race.html   la lecon « data race et exclusion mutuelle », 10 etapes
-    revision.html          18 cartes, en repetition espacee
-    js/lecon-data-race.js, js/cartes.js
+    lecon-moniteurs.html   la lecon « attendre son tour », 13 etapes
+    revision.html          29 cartes, en repetition espacee
+    js/lecon-data-race.js, js/lecon-moniteurs.js, js/cartes.js
   architectures-processeurs/   « Hierarchie memoire », squelette servant de patron
 ```
 

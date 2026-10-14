@@ -680,3 +680,64 @@ a.sujet.muet{ opacity:.6; }
 }
 .prop > i{ position:absolute; left:0; top:0; bottom:0; background:var(--mark); }
 .prop.ok > i{ background:var(--ok); }
+
+/* =========================================================================
+   Ordonnancement : des machines en colonnes, les taches empilees dessus.
+   Le dessin est en SVG (voir modules/graphes-prog-dynamique/js/ordonnancement.js) ;
+   seules les couleurs et les traits vivent ici, pour suivre les deux themes.
+   ========================================================================= */
+.ordo{ width:100%; height:auto; display:block; }
+
+/* une tache : un bloc neutre. La couleur vive ne sert qu'a ce qui est en cours. */
+.ordo .t-bloc{ fill:var(--panel-2); stroke:var(--line-2); stroke-width:1.5; }
+.ordo .t-bloc.cur{ fill:color-mix(in srgb, var(--mark) 26%, var(--panel)); stroke:var(--mark); }
+.ordo .t-bloc.jstar{ fill:color-mix(in srgb, var(--accent) 22%, var(--panel)); stroke:var(--accent); }
+.ordo .t-bloc.avant{ fill:var(--panel-2); stroke:var(--line-2); stroke-dasharray:3 2; }
+.ordo .t-txt{ fill:var(--ink-2); font-family:var(--mono); font-size:11px; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+.ordo .t-txt.sur{ fill:var(--ink); font-weight:600; }
+
+/* le socle d'une machine, et son etiquette */
+.ordo .m-socle{ stroke:var(--line); stroke-width:2; }
+.ordo .m-nom{ fill:var(--ink-3); font-family:var(--mono); font-size:11.5px; text-anchor:middle; }
+.ordo .m-charge{ fill:var(--ink); font-family:var(--mono); font-size:12.5px; text-anchor:middle; font-variant-numeric:tabular-nums; }
+.ordo .m-col.crit .m-charge{ fill:var(--no); font-weight:600; }
+.ordo .m-col.moins .m-nom{ fill:var(--ok); }
+.ordo .m-halo{ fill:none; stroke:var(--no); stroke-width:2; stroke-dasharray:4 3; }
+.ordo .m-halo.moins{ stroke:var(--ok); }
+
+/* les reperes horizontaux : OPT, la moyenne, la plus grande tache */
+.ordo .repere{ stroke-width:1.5; stroke-dasharray:6 4; }
+.ordo .repere.opt{ stroke:var(--accent); }
+.ordo .repere.moy{ stroke:var(--ok); }
+.ordo .repere.maxt{ stroke:var(--mark); }
+.ordo .repere-txt{ font-family:var(--mono); font-size:10.5px; dominant-baseline:central; }
+.ordo .repere-txt.opt{ fill:var(--accent); }
+.ordo .repere-txt.moy{ fill:var(--ok); }
+.ordo .repere-txt.maxt{ fill:var(--mark); }
+
+/* la file des taches qui restent a placer */
+.file{ display:flex; gap:4px; flex-wrap:wrap; align-items:flex-end; min-height:34px; }
+.file-t{
+  font-family:var(--mono); font-size:12px; font-variant-numeric:tabular-nums;
+  border:1px solid var(--line-2); border-radius:5px; padding:2px 7px;
+  background:var(--panel-2); color:var(--ink-2);
+}
+.file-t.cur{ border-color:var(--mark); color:var(--mark); font-weight:600; }
+.file-t.posee{ opacity:.3; text-decoration:line-through; }
+
+/* deux algorithmes cote a cote : meme echelle, pour que les hauteurs se comparent */
+.duo{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:16px; align-items:start; }
+.duo-titre{
+  display:flex; align-items:baseline; gap:10px; margin:0 0 6px;
+  font-family:var(--mono); font-size:12.5px; color:var(--ink-2);
+}
+.duo-titre .ratio{ margin-left:auto; font-variant-numeric:tabular-nums; }
+.duo-titre .ratio.bon{ color:var(--ok); }
+.duo-titre .ratio.mauvais{ color:var(--no); }
+
+/* une chaine d'inegalites qui se construit ligne a ligne */
+.chaine{ font-family:var(--mono); font-size:13px; line-height:1.9; }
+.chaine .ligne{ opacity:.25; transition:opacity .18s; }
+.chaine .ligne.vue{ opacity:1; }
+.chaine .ligne.cle{ color:var(--accent); font-weight:600; }
+.chaine .just{ color:var(--ink-3); font-size:11.5px; font-family:var(--sans); font-style:italic; }
