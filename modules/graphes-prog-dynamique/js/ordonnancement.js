@@ -10,7 +10,11 @@
      optimum(durees, m)         le vrai OPT, par separation et evaluation
      bornes(durees, m)          les deux minorants de OPT
      dessiner(svg, etat, opts)  le dessin SVG des colonnes de charge
+     chaine(hote, lignes, opts) une chaine d'inegalites, en symboles ou en mots
      INSTANCES                  les instances remarquables du cours
+
+   Cle de stockage posee ici (cf. les conventions de progres.js) :
+     chaine-en-mots             "1" si l'utilisateur prefere lire en mots
 
    Script classique, pas de module ES : l'ouverture directe d'un fichier doit
    continuer de marcher sans serveur.
@@ -177,6 +181,85 @@ window.CI_ORDO = (function (CI) {
     }
   ];
 
+  /* ------------------------------------------------ chaines d'inegalites
+
+     Une meme chaine se lit de deux facons. En SYMBOLES, les formes se voient :
+     on repere qu'un terme se factorise, donc on peut passer a la ligne
+     suivante. En MOTS, on comprend ce qu'on affirme, mais plus aucune
+     transformation n'est visible -- c'est precisement ce que le bouton fait
+     sentir. Le choix est garde dans localStorage, pour suivre d'une lecon a
+     l'autre.                                                               */
+
+  var CLE_MOTS = "chaine-en-mots";
+
+  function lirePref() {
+    try { return window.localStorage.getItem(CLE_MOTS) === "1"; }
+    catch (e) { return false; }      /* navigation privee : symboles par defaut */
+  }
+
+  function ecrirePref(v) {
+    try { window.localStorage.setItem(CLE_MOTS, v ? "1" : "0"); }
+    catch (e) { /* sans effet */ }
+  }
+
+  /**
+   * hote   : le conteneur ou dessiner
+   * lignes : [{ sym, mots, just, cle }]
+   *            sym   la ligne en symboles
+   *            mots  la meme, en mots
+   *            just  la justification, affichee a droite (optionnelle)
+   *            cle   true pour la ligne de conclusion, mise en avant
+   * opts   : { revele } -- true pour ne devoiler qu'une ligne a la fois
+   *
+   * Rend { bouton, suivante, tout, fini, total }.
+   */
+  function chaine(hote, lignes, opts) {
+    opts = opts || {};
+    var mots = lirePref();
+    var vues = opts.revele ? 0 : lignes.length;
+
+    var box = CI.h("div", { "class": "chaine" });
+    var note = CI.h("p", { "class": "chaine-note" });
+    hote.appendChild(box);
+    hote.appendChild(note);
+
+    var btn = CI.h("button", { "class": "bascule" });
+
+    function dessine() {
+      CI.clear(box);
+      lignes.forEach(function (l, k) {
+        var texte = mots ? l.mots : l.sym;
+        box.appendChild(CI.h("div", {
+          "class": "ligne" + (k < vues ? " vue" : "") + (l.cle ? " cle" : "") +
+                   (mots ? " en-mots" : ""),
+          html: texte + (l.just ? " <span class='just'>" + l.just + "</span>" : "")
+        }));
+      });
+
+      btn.textContent = mots ? "Afficher en symboles" : "Afficher en mots";
+      btn.setAttribute("aria-pressed", String(mots));
+
+      /* Le bouton n'est pas un gadget : il montre une vraie limite des mots. */
+      note.innerHTML = mots
+        ? "En mots, on comprend chaque ligne — mais on ne <strong>voit</strong> plus " +
+          "comment passer de l'une à la suivante. Les regroupements de termes sont " +
+          "invisibles ici."
+        : "En symboles, les formes se voient : c'est ce qui permet de repérer qu'un " +
+          "terme se factorise, et donc d'écrire la ligne suivante.";
+    }
+
+    btn.onclick = function () { mots = !mots; ecrirePref(mots); dessine(); };
+    dessine();
+
+    return {
+      bouton: btn,
+      suivante: function () { if (vues < lignes.length) vues++; dessine(); return vues; },
+      tout: function () { vues = lignes.length; dessine(); },
+      fini: function () { return vues >= lignes.length; },
+      total: lignes.length
+    };
+  }
+
   /* ------------------------------------------------ le dessin */
 
   /**
@@ -300,6 +383,7 @@ window.CI_ORDO = (function (CI) {
     deroule: deroule,
     optimum: optimum,
     bornes: bornes,
+    chaine: chaine,
     dessiner: dessiner,
     etatApres: etatApres,
     pireGlouton: pireGlouton,

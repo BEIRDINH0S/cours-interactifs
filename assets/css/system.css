@@ -741,3 +741,12 @@ a.sujet.muet{ opacity:.6; }
 .chaine .ligne.vue{ opacity:1; }
 .chaine .ligne.cle{ color:var(--accent); font-weight:600; }
 .chaine .just{ color:var(--ink-3); font-size:11.5px; font-family:var(--sans); font-style:italic; }
+
+/* la bascule symboles / mots d'une chaine d'inegalites */
+.chaine .ligne.en-mots{ font-family:var(--sans); font-size:14px; line-height:1.75; }
+.chaine .ligne.en-mots .just{ display:block; margin-left:14px; }
+.chaine-note{
+  margin:12px 0 0; font-size:13px; color:var(--ink-3); font-style:italic;
+  max-width:62ch; border-top:1px solid var(--line); padding-top:10px;
+}
+button.bascule[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); }

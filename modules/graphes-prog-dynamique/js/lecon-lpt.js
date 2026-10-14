@@ -192,12 +192,28 @@
       mount: function (api) {
         api.figHidden(true);
 
-        var box = CI.h("div", { "class": "chaine" }, [
-          CI.h("div", { "class": "ligne vue", html: "ALG ≤ (1/m)·Σⱼpⱼ + p(j*)·(1 − 1/m) <span class='just'>pas 1 à 5, inchangés</span>" }),
-          CI.h("div", { "class": "ligne vue", html: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + p(j*)·(1 − 1/m) <span class='just'>minorant de la moyenne</span>" }),
-          CI.h("div", { "class": "ligne vue cle", html: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + <b>?</b>·(1 − 1/m) <span class='just'>← tout le jeu est ici</span>" })
-        ]);
-        api.host.appendChild(box);
+        var ch = O.chaine(api.host, [
+          {
+            sym: "ALG ≤ (1/m)·Σⱼpⱼ + p(j*)·(1 − 1/m)",
+            mots: "le makespan ≤ le travail total divisé par le nombre de machines, plus la " +
+                  "durée de la dernière tâche posée sur la machine critique, multipliée par " +
+                  "(1 moins l'inverse du nombre de machines)",
+            just: "pas 1 à 5, inchangés"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + p(j*)·(1 − 1/m)",
+            mots: "≤ l'optimum, plus la durée de cette dernière tâche multipliée par " +
+                  "(1 moins l'inverse du nombre de machines)",
+            just: "minorant de la moyenne"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + <b>?</b>·(1 − 1/m)",
+            mots: "≤ l'optimum, plus <b>ce qu'on saura majorer sur cette dernière tâche</b>, " +
+                  "multiplié par (1 moins l'inverse du nombre de machines)",
+            cle: true, just: "← tout le jeu est ici"
+          }
+        ], {});
+        api.tools([ch.bouton]);
 
         api.readoutNode(CI.h("div", {}, [
           CI.h("div", { "class": "counters" }, [
@@ -359,11 +375,26 @@
       mount: function (api) {
         api.figHidden(true);
 
-        api.host.appendChild(CI.h("div", { "class": "chaine" }, [
-          CI.h("div", { "class": "ligne vue", html: "ALG ≤ OPT + p(j*)·(1 − 1/m)" }),
-          CI.h("div", { "class": "ligne vue", html: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + (OPT/2)·(1 − 1/m) <span class='just'>le nouvel ingrédient</span>" }),
-          CI.h("div", { "class": "ligne vue cle", html: "ALG ≤ (3/2 − 1/(2m)) · OPT <span class='just'>∎</span>" })
-        ]));
+        var ch6 = O.chaine(api.host, [
+          {
+            sym: "ALG ≤ OPT + p(j*)·(1 − 1/m)",
+            mots: "le makespan ≤ l'optimum, plus la durée de la dernière tâche posée sur la " +
+                  "machine critique, multipliée par (1 moins l'inverse du nombre de machines)"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + (OPT/2)·(1 − 1/m)",
+            mots: "≤ l'optimum, plus la moitié de l'optimum multipliée par (1 moins " +
+                  "l'inverse du nombre de machines)",
+            just: "le nouvel ingrédient"
+          },
+          {
+            sym: "ALG ≤ (3/2 − 1/(2m)) · OPT",
+            mots: "le makespan ≤ (trois demis moins l'inverse du double du nombre de machines) " +
+                  "fois l'optimum",
+            cle: true, just: "∎"
+          }
+        ], {});
+        api.tools([ch6.bouton]);
 
         api.readoutNode(CI.h("div", {}, [
           CI.h("div", { "class": "counters" }, [

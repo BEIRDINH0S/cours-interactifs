@@ -75,30 +75,6 @@
     return b;
   }
 
-  /** Une chaine d'inegalites revelee ligne a ligne. */
-  function chaine(lignes, hote) {
-    var vues = 0;
-    var box = CI.h("div", { "class": "chaine" });
-    hote.appendChild(box);
-
-    function dessine() {
-      CI.clear(box);
-      lignes.forEach(function (l, k) {
-        box.appendChild(CI.h("div", {
-          "class": "ligne" + (k < vues ? " vue" : "") + (l.cle ? " cle" : ""),
-          html: l.t + (l.j ? " <span class='just'>" + l.j + "</span>" : "")
-        }));
-      });
-    }
-    dessine();
-    return {
-      suivante: function () { if (vues < lignes.length) vues++; dessine(); return vues; },
-      tout: function () { vues = lignes.length; dessine(); },
-      fini: function () { return vues >= lignes.length; },
-      total: lignes.length
-    };
-  }
-
   /* ------------------------------------------------ les etapes */
 
   var STEPS = [
@@ -436,14 +412,44 @@
       mount: function (api) {
         api.figHidden(true);
 
-        var ch = chaine([
-          { t: "ALG = L(i*) = L′(i*) + p(j*)", j: "pas 2 : j* est la dernière posée sur i*" },
-          { t: "&nbsp;&nbsp;&nbsp;&nbsp;≤ (1/m)·(Σⱼpⱼ − p(j*)) + p(j*)", j: "pas 3 et 4 : i* était la moins chargée" },
-          { t: "&nbsp;&nbsp;&nbsp;&nbsp;= (1/m)·Σⱼpⱼ + p(j*)·(1 − 1/m)", j: "pur calcul, on factorise p(j*)" },
-          { t: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + p(j*)·(1 − 1/m)", j: "minorant 2 : OPT ≥ Σⱼpⱼ/m" },
-          { t: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + OPT·(1 − 1/m)", j: "minorant 1 : OPT ≥ max pⱼ ≥ p(j*), et 1 − 1/m ≥ 0" },
-          { t: "ALG ≤ (2 − 1/m) · OPT", cle: true, j: "∎" }
-        ], api.host);
+        var ch = O.chaine(api.host, [
+          {
+            sym: "ALG = L(i*) = L′(i*) + p(j*)",
+            mots: "le makespan obtenu, c'est la charge de la machine critique, " +
+                  "c'est-à-dire sa charge juste avant sa dernière tâche, plus la durée " +
+                  "de cette dernière tâche",
+            just: "pas 2 : j* est la dernière posée sur i*"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ (1/m)·(Σⱼpⱼ − p(j*)) + p(j*)",
+            mots: "≤ (le travail total moins la durée de cette dernière tâche) divisé par " +
+                  "le nombre de machines, plus la durée de cette dernière tâche",
+            just: "pas 3 et 4 : i* était la moins chargée"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;= (1/m)·Σⱼpⱼ + p(j*)·(1 − 1/m)",
+            mots: "= le travail total divisé par le nombre de machines, plus la durée de " +
+                  "cette dernière tâche multipliée par (1 moins l'inverse du nombre de machines)",
+            just: "pur calcul, on factorise p(j*)"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + p(j*)·(1 − 1/m)",
+            mots: "≤ l'optimum, plus la durée de cette dernière tâche multipliée par " +
+                  "(1 moins l'inverse du nombre de machines)",
+            just: "minorant 2 : OPT ≥ Σⱼpⱼ/m"
+          },
+          {
+            sym: "&nbsp;&nbsp;&nbsp;&nbsp;≤ OPT + OPT·(1 − 1/m)",
+            mots: "≤ l'optimum, plus l'optimum multiplié par (1 moins l'inverse du nombre " +
+                  "de machines)",
+            just: "minorant 1 : OPT ≥ max pⱼ ≥ p(j*), et 1 − 1/m ≥ 0"
+          },
+          {
+            sym: "ALG ≤ (2 − 1/m) · OPT",
+            mots: "le makespan obtenu ≤ (2 moins l'inverse du nombre de machines) fois l'optimum",
+            cle: true, just: "∎"
+          }
+        ], { revele: true });
 
         function maj() {
           var v = ch.suivante();
@@ -464,7 +470,8 @@
 
         api.tools([
           bouton("Ligne suivante", maj, "primary"),
-          bouton("Tout révéler", function () { ch.tout(); maj(); })
+          bouton("Tout révéler", function () { ch.tout(); maj(); }),
+          ch.bouton
         ]);
         api.readout([{ t: "lignes révélées", v: "0 / " + ch.total }]);
       }
