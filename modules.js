@@ -19,14 +19,21 @@ window.CI_MODULES = [
     resume: "Comment un algorithme qui tire au hasard, et qui se trompe la plupart du temps, " +
             "résout quand même un problème que l'énumération ne peut pas atteindre.",
     href: "modules/advanced-algorithms/index.html",
-    tags: ["1 leçon", "1 atelier", "20 cartes"],
-    aVenir: ["Répéter pour fiabiliser", "Exponentiation rapide"],
+    tags: ["2 leçons", "1 atelier", "26 cartes"],
+    aVenir: ["Exponentiation rapide"],
     pages: [
       {
         titre: "Coupe minimum",
         type: "lecon",
         href: "modules/advanced-algorithms/lecon-mincut.html",
         resume: "De la définition à la démonstration de la borne.",
+        statut: "vivant"
+      },
+      {
+        titre: "Répéter pour fiabiliser",
+        type: "lecon",
+        href: "modules/advanced-algorithms/lecon-repetition.html",
+        resume: "Pourquoi N exécutions suffisent, ce qu'elles coûtent, et les mesures du TP.",
         statut: "vivant"
       },
       {
@@ -40,7 +47,7 @@ window.CI_MODULES = [
         titre: "Réviser",
         type: "revision",
         href: "modules/advanced-algorithms/revision.html",
-        resume: "20 cartes, en répétition espacée.",
+        resume: "26 cartes, en répétition espacée.",
         statut: "vivant"
       }
     ]

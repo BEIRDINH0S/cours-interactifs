@@ -278,6 +278,88 @@ window.CI_CARTES = [
     ],
     why: "Chaque arête figure dans les <strong>deux</strong> listes d'adjacence. Le test " +
          "<code>p-&gt;node &lt; u</code> n'en retient qu'une occurrence."
+  },
+
+  /* ---------------------------------------------------------- repetition */
+  {
+    type: "recto", tag: "répétition",
+    q: "Pourquoi répéter l'algorithme, plutôt que l'améliorer ?",
+    a: "Parce qu'aucune exécution ne devient meilleure : c'est leur <strong>indépendance</strong> " +
+       "qui travaille. Si une exécution réussit avec probabilité p, les N échouent toutes avec " +
+       "probabilité <strong>(1−p)<sup>N</sup></strong>, qui s'effondre exponentiellement."
+  },
+  {
+    type: "recto", tag: "répétition",
+    q: "Combien d'itérations pour trouver la coupe minimum avec une probabilité ≥ 0,999 ?",
+    a: "<strong>N = C(n,2) · ln(1000)</strong>, soit environ 6,91 · n(n−1)/2.<br>" +
+       "On part de 1 − p ≤ e<sup>−p</sup>, donc (1−p)<sup>N</sup> ≤ e<sup>−Np</sup> ; il suffit " +
+       "de N = ln(1/ε)/p, et p ≥ 2/n(n−1)."
+  },
+  {
+    type: "recto", tag: "répétition",
+    q: "La borne 2/n(n−1) est-elle représentative ?",
+    a: "Non : c'est un <strong>pire cas</strong>, atteint par le cycle. Mesuré sur le TP, " +
+       "<code>as2000</code> (n = 6474) rend la coupe minimum dans <strong>99,9 %</strong> des " +
+       "exécutions, contre une borne de 4,8·10<sup>−8</sup>. La garantie reste vraie, elle est " +
+       "simplement très prudente."
+  },
+  {
+    type: "qcm", tag: "répétition",
+    q: "Qu'y a-t-il à remettre dans l'état initial entre deux itérations ?",
+    opts: [
+      { t: "Les trois tableaux de groupes, et un nouveau mélange des arêtes", ok: true,
+        why: "Oui. Le graphe n'est jamais modifié : tout l'état de l'algorithme tient dans " +
+             "<code>groupe</code>, <code>membres</code> et <code>taille</code>. Les arêtes " +
+             "collectées, elles, sont les mêmes — seul leur ordre change." },
+      { t: "Le graphe, qu'il faut recharger depuis le fichier", ok: false,
+        why: "Non : le graphe n'est jamais touché par les contractions, qui sont simulées par " +
+             "les groupes. Le recharger serait du temps perdu." },
+      { t: "La graine du générateur aléatoire, à re-semer à chaque tour", ok: false,
+        why: "Non, et c'est même nuisible : <code>srand()</code> s'appelle une seule fois. " +
+             "Re-semer avec l'horloge peut redonner la même graine et donc le même tirage." }
+    ]
+  },
+  {
+    type: "qcm", tag: "répétition",
+    q: "Après N itérations, comment être <em>sûr</em> que la coupe trouvée est la minimum ?",
+    opts: [
+      { t: "Si elle égale le plus petit degré du graphe", ok: true,
+        why: "Oui : isoler un sommet est une coupe, donc coupe minimum ≤ degré minimum. Si la " +
+             "valeur trouvée atteint cette borne, elle est démontrée minimum — sans probabilité. " +
+             "Une valeur 0 sur un graphe non connexe conclut de même." },
+      { t: "Si N dépasse C(n,2)·ln(1000)", ok: false,
+        why: "Non : cela donne 99,9 % de chances, pas une certitude. C'est une garantie " +
+             "probabiliste, jamais une preuve." },
+      { t: "Si plusieurs itérations trouvent la même valeur", ok: false,
+        why: "Non : elles peuvent toutes se tromper de la même façon. Une coupe fréquente n'est " +
+             "pas une coupe minimum." }
+    ]
+  },
+  {
+    type: "trous", tag: "répétition",
+    q: "Complète la boucle des N itérations (question 15).",
+    code: [
+      "for (it = 0; it < nb_iterations; it++) {",
+      "",
+      "    if (it > 0) {",
+      "        {0}(g->n, groupe, membres, taille);",
+      "        {1}(ordre, g->m);",
+      "    }",
+      "",
+      "    coupe = une_iteration_karger(g, ordre, groupe,",
+      "                                 membres, taille, &nbg, &nbt);",
+      "}"
+    ],
+    trous: [
+      { sol: "reinitialiser_groupes",
+        opts: ["reinitialiser_groupes", "initialiser_groupes", "free_nodl"] },
+      { sol: "melanger_aretes",
+        opts: ["melanger_aretes", "ordre_aleatoire_aretes", "contraction_simulee"] }
+    ],
+    why: "<code>initialiser_groupes</code> rallouerait les n listes à chaque tour : fuite mémoire " +
+         "et n mallocs par itération. <code>ordre_aleatoire_aretes</code> recollecterait les " +
+         "arêtes en O(n+m) pour rien, et rendrait un nouveau tableau à libérer. Entre deux " +
+         "itérations, on réutilise tout : on redistribue les cellules et on remélange sur place."
   }
 
 ];

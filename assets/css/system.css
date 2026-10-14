@@ -649,3 +649,34 @@ a.sujet.muet{ opacity:.6; }
 }
 .section-titre h2{ margin:0; }
 .section-titre .compte{ font-size:14px; color:var(--ink-3); margin-left:auto; }
+
+/* =========================================================================
+   Table de mesures : les relevés d'un TP, affichés dans une leçon.
+   Des filets et des chiffres alignés, pas des cartes : on vient ici pour
+   comparer des colonnes entre elles.
+   ========================================================================= */
+.tpt{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:12.5px; }
+.tpt th{
+  text-align:right; font-weight:500; font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); padding:0 7px 6px;
+  border-bottom:1px solid var(--line); white-space:nowrap;
+}
+.tpt th:first-child, .tpt td:first-child{ text-align:left; }
+.tpt td{
+  text-align:right; padding:5px 7px; border-bottom:1px solid var(--line);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.tpt tbody tr{ cursor:pointer; }
+.tpt tbody tr:hover td{ background:var(--panel-2); }
+.tpt tr.cur td{ background:var(--panel-2); box-shadow:inset 3px 0 0 var(--accent); }
+.tpt td.sur{ color:var(--ok); }
+.tpt td.pasur{ color:var(--ink-3); }
+.tpt-wrap{ overflow-x:auto; }
+
+/* une barre de proportion lue d'un coup d'oeil, dans une cellule ou seule */
+.prop{
+  position:relative; height:9px; border-radius:2px; background:var(--line-2);
+  overflow:hidden; min-width:60px;
+}
+.prop > i{ position:absolute; left:0; top:0; bottom:0; background:var(--mark); }
+.prop.ok > i{ background:var(--ok); }
